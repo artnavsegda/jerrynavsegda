@@ -6,11 +6,29 @@ static jerry_value_t
 print_handler (const jerry_value_t function_object,
                const jerry_value_t function_this,
                const jerry_value_t arguments[],
-               const jerry_length_t argument_count)
+               const jerry_length_t arguments_count)
 {
-  /* No arguments are used in this example */
-  /* Print out a static string */
-  printf ("Print handler was called\n");
+  /* There should be at least one argument */
+  if (arguments_count > 0)
+  {
+    /* Convert the first argument to a string (JS "toString" operation) */
+    jerry_value_t string_value = jerry_value_to_string (arguments[0]);
+
+    /* A naive allocation of buffer for the string */
+    jerry_char_t buffer[256];
+
+    /* Copy the whole string to the buffer, without a null termination character,
+     * Please note that if the string does not fit into the buffer nothing will be copied.
+     * More details on the API reference page
+     */
+    jerry_size_t copied_bytes = jerry_string_to_utf8_char_buffer (string_value, buffer, sizeof (buffer) - 1);
+    buffer[copied_bytes] = '\0';
+
+    /* Release the "toString" result */
+    jerry_release_value (string_value);
+
+    printf ("%s\n", (const char *)buffer);
+  }
 
   /* Return an "undefined" value to the JavaScript engine */
   return jerry_create_undefined ();
