@@ -4,6 +4,9 @@ AC_MSG_NOTICE([Art Navsegda])
 AC_PROG_CC_STDC
 AX_PTHREAD
 AC_CHECK_LIB([pthread],[pthread_create])
+AC_CHECK_LIB([jerry-port-default],[jerry_port_fatal])
+AC_CHECK_LIB([jerry-core],[jerry_init])
+AC_CHECK_LIB([jerry-libm],[jerry_init])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_FILES([Makefile src/Makefile])
 AC_OUTPUT
