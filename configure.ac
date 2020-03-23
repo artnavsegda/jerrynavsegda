@@ -2,8 +2,6 @@ AC_INIT([ArtNavsegda], [1.0], [artnavsegda@gmail.com],[artnavsegda],[https://git
 AM_INIT_AUTOMAKE
 AC_MSG_NOTICE([Art Navsegda])
 AC_PROG_CC_STDC
-AX_PTHREAD
-AC_CHECK_LIB([pthread],[pthread_create])
 AC_CHECK_LIB([jerry-port-default],[jerry_port_fatal])
 AC_CHECK_LIB([jerry-libm],[jerry_init],,,[-ljerry-core])
 AC_CHECK_LIB([jerry-core],[jerry_init])
