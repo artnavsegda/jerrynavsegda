@@ -1,1 +1,1 @@
-bin_PROGRAMS = hello
+bin_PROGRAMS = hello hello2
