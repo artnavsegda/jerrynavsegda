@@ -7,7 +7,13 @@ print (my_var);
 joke();
 
 var strda = joke("hello.txt");
+
 print ("return " + strda);
+
+myjson = JSON.parse(strda);
+
+print(myjson);
+print(myjson.something);
 
 var str = MyObject.myFunc ();
 print (str);
