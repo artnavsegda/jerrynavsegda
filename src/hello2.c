@@ -18,7 +18,13 @@ readline_handler (const jerry_value_t function_object,
                const jerry_length_t arguments_count)
 {
   char buffer[256];
-  return jerry_create_string (fgets(buffer, 256, stdin));
+
+  fgets(buffer, 256, stdin);
+
+  if(buffer[strlen(buffer) - 1] == '\n')
+    buffer[strlen(buffer) - 1] = 0;
+
+  return jerry_create_string (buffer);
 }
 
 /**
