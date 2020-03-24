@@ -6,7 +6,7 @@ print (my_var);
 
 joke();
 
-var strda = joke("aaaa");
+var strda = joke("hello.txt");
 print ("return " + strda);
 
 var str = MyObject.myFunc ();

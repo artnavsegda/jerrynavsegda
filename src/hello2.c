@@ -48,9 +48,22 @@ joke_handler (const jerry_value_t function_object,
     /* Release the "toString" result */
     jerry_release_value (string_value);
 
+    int filetoread = open(buffer,O_RDONLY);
+
+    struct stat sb;
+    fstat(filetoread, &sb);
+    char *filecontent = malloc(sb.st_size);
+
+    read(filetoread,filecontent,sb.st_size);
+    close(filetoread);
+
     printf ("Joke handler was called with args %s\n", (const char *)buffer);
 
-    return jerry_create_string ("pretty");
+    jerry_value_t returnvalue = jerry_create_string (filecontent);
+
+    free(filecontent);
+
+    return returnvalue;
   }
   else
     printf ("Joke handler was called\n");
