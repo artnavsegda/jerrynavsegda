@@ -1,4 +1,8 @@
 #include <string.h>
+#include <stdlib.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
 #include "jerryscript.h"
 #include "jerryscript-ext/handler.h"
 
@@ -58,15 +62,17 @@ joke_handler (const jerry_value_t function_object,
 
 int main (void)
 {
-  FILE * jsmain = fopen("./hello.js","r");
-  char buf[10000];
-  fread(buf,10000,1,jsmain);
-  fclose(jsmain);
+  int jsmain = open("./hello.js",O_RDONLY);
+
+  struct stat sb;
+  fstat(jsmain, &sb);
+  char *buf = malloc(sb.st_size);
+
+  read(jsmain,buf,sb.st_size);
+  close(jsmain);
 
   /* Initializing JavaScript environment */
   jerry_init (JERRY_INIT_EMPTY);
-
-
 
   /* Register 'print' function from the extensions */
   jerryx_handler_register_global ((const jerry_char_t *) "print", jerryx_handler_print);
