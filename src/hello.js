@@ -19,3 +19,6 @@ var str = MyObject.myFunc ();
 print (str);
 
 print ('Hello from JS with ext!');
+
+print(readline());
+

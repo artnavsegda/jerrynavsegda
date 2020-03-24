@@ -11,6 +11,16 @@ struct my_struct
   const char *msg;
 } my_struct;
 
+static jerry_value_t
+readline_handler (const jerry_value_t function_object,
+               const jerry_value_t function_this,
+               const jerry_value_t arguments[],
+               const jerry_length_t arguments_count)
+{
+  char buffer[256];
+  return jerry_create_string (fgets(buffer, 256, stdin));
+}
+
 /**
  * Get a string from a native object
  */
@@ -140,8 +150,21 @@ int main (void)
 
   jerry_release_value (set_result);
 
-  jerry_release_value (property_value_func);
-  jerry_release_value (property_name_joke);
+  jerry_value_t property_name_readline = jerry_create_string ((const jerry_char_t *) "readline");
+  jerry_value_t property_value_func_readline = jerry_create_external_function (readline_handler);
+
+  /* Add the "joke" property with the function value to the "global" object */
+  set_result = jerry_set_property (global_object, property_name_readline, property_value_func_readline);
+
+  /* Check if there was no error when adding the property (in this case it should never happen) */
+  if (jerry_value_is_error (set_result)) {
+    printf ("Failed to add the 'readline' property\n");
+  }
+
+  jerry_release_value (set_result);
+
+  jerry_release_value (property_name_readline);
+  jerry_release_value (property_value_func_readline);
 
   /* Releasing string values, as it is no longer necessary outside of engine */
   jerry_release_value (prop_name);
