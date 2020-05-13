@@ -36,11 +36,11 @@ while(running)
     case "help":
       print("help: help\nexit: exit");
     break;
-    case "cat":
+    case "kitty":
       print("meow");
     break;
-    case "joke":
-      joke();
+    case "cat":
+      cat(userinput[1]);
     break;
     case "echo":
       print(userinput[1]);

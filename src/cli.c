@@ -19,11 +19,6 @@ static jerry_value_t readline_handler (const jerry_value_t function_object, cons
   return jerry_create_string (buffer);
 }
 
-static jerry_value_t cat_handler (const jerry_value_t function_object, const jerry_value_t function_this, const jerry_value_t arguments[], const jerry_length_t arguments_count)
-{
-  return jerry_create_string ("cat");
-}
-
 /**
  * Get a string from a native object
  */
@@ -70,7 +65,7 @@ joke_handler (const jerry_value_t function_object,
     read(filetoread,filecontent,sb.st_size);
     close(filetoread);
 
-    printf ("Joke handler was called with args %s\n", (const char *)buffer);
+    printf ("Cat was called with args %s\n", (const char *)buffer);
 
     jerry_value_t returnvalue = jerry_create_string (filecontent);
 
@@ -140,7 +135,7 @@ int main (void)
   }
   jerry_release_value (set_result);
 
-  jerry_value_t property_name_joke = jerry_create_string ((const jerry_char_t *) "joke");
+  jerry_value_t property_name_joke = jerry_create_string ((const jerry_char_t *) "cat");
   jerry_value_t property_value_func = jerry_create_external_function (joke_handler);
 
   /* Add the "joke" property with the function value to the "global" object */
