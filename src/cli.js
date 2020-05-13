@@ -49,7 +49,10 @@ MyObject = {
     }
     else
     {
-      print("\nhelp\nexit\ncat\nsystem\npipe");
+      print("");
+      for (var i = 0; i < commands.length; i++) {
+        print(commands[i]);
+      }
     }
   },
   compute: function (some)
