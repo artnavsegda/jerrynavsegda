@@ -334,6 +334,7 @@ int main (void)
   {
     sprintf(parseline,"MyObject.compute(\"%s\");",inputline);
     eval_ret = jerry_eval (parseline, strlen (parseline), JERRY_PARSE_NO_OPTS);
+    printf ("number: %lf\n", jerry_get_number_value (eval_ret));
     jerry_release_value (eval_ret);
   }
 
