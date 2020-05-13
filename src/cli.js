@@ -49,6 +49,9 @@ while(running)
     case "echo":
       print(userinput[1]);
     break;
+    case "system":
+      system(userinput[1]);
+    break;
     default:
       print(userinput[0]);
   }

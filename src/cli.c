@@ -77,9 +77,34 @@ static jerry_value_t cat_handler(const jerry_value_t function_object, const jerr
     printf ("Joke handler was called\n");
 
   /* Return an "undefined" value to the JavaScript engine */
-  return jerry_create_undefined ();
+  return jerry_create_undefined();
 }
 
+static jerry_value_t system_handler(const jerry_value_t function_object, const jerry_value_t function_this, const jerry_value_t arguments[], const jerry_length_t arguments_count)
+{
+  if (arguments_count > 0)
+  {
+    jerry_value_t string_value = jerry_value_to_string (arguments[0]);
+    jerry_char_t buffer[256];
+    jerry_size_t copied_bytes = jerry_string_to_utf8_char_buffer (string_value, buffer, sizeof (buffer) - 1);
+    buffer[copied_bytes] = '\0';
+
+    jerry_release_value (string_value);
+
+    printf ("System was called with args %s\n", (const char *)buffer);
+
+    system(buffer);
+
+    //printf("contents: %s",filecontent);
+
+    return jerry_create_undefined();
+  }
+  else
+    printf ("Joke handler was called\n");
+
+  /* Return an "undefined" value to the JavaScript engine */
+  return jerry_create_undefined();
+}
 
 int main (void)
 {
@@ -135,7 +160,6 @@ int main (void)
   }
   jerry_release_value (set_result);
 
-
   // ======= cat =======
 
   set_result = jerry_set_property (global_object, jerry_create_string ((const jerry_char_t *) "cat"), jerry_create_external_function (cat_handler));
@@ -143,6 +167,17 @@ int main (void)
   /* Check if there was no error when adding the property (in this case it should never happen) */
   if (jerry_value_is_error (set_result)) {
     printf ("Failed to add the 'cat' property\n");
+  }
+
+  jerry_release_value (set_result);
+
+  // ======= system =======
+
+  set_result = jerry_set_property (global_object, jerry_create_string ((const jerry_char_t *) "system"), jerry_create_external_function (system_handler));
+
+  /* Check if there was no error when adding the property (in this case it should never happen) */
+  if (jerry_value_is_error (set_result)) {
+    printf ("Failed to add the 'system' property\n");
   }
 
   jerry_release_value (set_result);
