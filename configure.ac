@@ -6,6 +6,7 @@ AC_CHECK_LIB([jerry-port-default],[jerry_port_fatal])
 AC_CHECK_LIB([jerry-libm],[jerry_init],,,[-ljerry-core])
 AC_CHECK_LIB([jerry-core],[jerry_init])
 AC_CHECK_LIB([jerry-ext],[jerry_init])
+AC_CHECK_LIB([readline], [readline])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_FILES([Makefile src/Makefile])
 AC_OUTPUT

@@ -27,13 +27,16 @@ var running = true;
 while(running)
 {
   var userinput = readline();
-  print(userinput);
 
   switch(userinput)
   {
     case "exit":
       running = false;
     break;
+    case "help":
+      print("help: help\nexit: exit");
+    break;
     default:
+      print(userinput);
   }
 }

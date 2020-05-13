@@ -1,2 +1,2 @@
 CFLAGS +=-O0
-bin_PROGRAMS = hello hello2
+bin_PROGRAMS = hello cli

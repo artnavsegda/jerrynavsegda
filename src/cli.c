@@ -3,6 +3,8 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <readline/readline.h>
+#include <readline/history.h>
 #include "jerryscript.h"
 #include "jerryscript-ext/handler.h"
 
@@ -17,13 +19,7 @@ readline_handler (const jerry_value_t function_object,
                const jerry_value_t arguments[],
                const jerry_length_t arguments_count)
 {
-  char buffer[256];
-
-  fgets(buffer, 256, stdin);
-
-  if(buffer[strlen(buffer) - 1] == '\n')
-    buffer[strlen(buffer) - 1] = 0;
-
+  char * buffer = readline(">");
   return jerry_create_string (buffer);
 }
 
@@ -91,7 +87,7 @@ joke_handler (const jerry_value_t function_object,
 
 int main (void)
 {
-  int jsmain = open("./hello.js",O_RDONLY);
+  int jsmain = open("./cli.js",O_RDONLY);
 
   struct stat sb;
   fstat(jsmain, &sb);
