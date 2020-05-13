@@ -40,7 +40,7 @@ while(running)
       print("meow");
     break;
     case "cat":
-      cat(userinput[1]);
+      print(cat(userinput[1]));
     break;
     case "echo":
       print(userinput[1]);

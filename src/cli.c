@@ -59,12 +59,12 @@ static jerry_value_t cat_handler(const jerry_value_t function_object, const jerr
     }
     else
     {
-      filecontent = "empty\n";
+      filecontent = "empty";
     }
 
     printf ("Cat was called with args %s\n", (const char *)buffer);
 
-    printf("contents: %s",filecontent);
+    //printf("contents: %s",filecontent);
 
     jerry_value_t returnvalue = jerry_create_string (filecontent);
 
