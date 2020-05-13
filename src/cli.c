@@ -100,7 +100,7 @@ static jerry_value_t system_handler(const jerry_value_t function_object, const j
     return jerry_create_undefined();
   }
   else
-    printf ("Joke handler was called\n");
+    printf ("System handler was called\n");
 
   /* Return an "undefined" value to the JavaScript engine */
   return jerry_create_undefined();
