@@ -39,7 +39,13 @@ MyObject = {
 
     if(some)
     {
-      return "something";
+      for (var i = 0; i < commands.length; i++) {
+        print(commands[i]);
+        if (commands[i].startsWith(some))
+        {
+        //  return commands[i];
+        }
+      }
     }
     else
     {
