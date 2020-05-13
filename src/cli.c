@@ -13,31 +13,19 @@ struct my_struct
   const char *msg;
 } my_struct;
 
-static jerry_value_t readline_handler (const jerry_value_t function_object, const jerry_value_t function_this, const jerry_value_t arguments[], const jerry_length_t arguments_count)
+static jerry_value_t readline_handler(const jerry_value_t function_object, const jerry_value_t function_this, const jerry_value_t arguments[], const jerry_length_t arguments_count)
 {
   char * buffer = readline(">");
   return jerry_create_string (buffer);
 }
 
-/**
- * Get a string from a native object
- */
-static jerry_value_t
-get_msg_handler (const jerry_value_t func_value, /**< function object */
-                 const jerry_value_t this_value, /**< this arg */
-                 const jerry_value_t *args_p, /**< function arguments */
-                 const jerry_length_t args_cnt) /**< number of function arguments */
+static jerry_value_t get_msg_handler(const jerry_value_t func_value, const jerry_value_t this_value, const jerry_value_t *args_p, const jerry_length_t args_cnt)
 {
   return jerry_create_string ((const jerry_char_t *) my_struct.msg);
-} /* get_msg_handler */
+}
 
-static jerry_value_t
-joke_handler (const jerry_value_t function_object,
-               const jerry_value_t function_this,
-               const jerry_value_t arguments[],
-               const jerry_length_t arguments_count)
+static jerry_value_t cat_handler(const jerry_value_t function_object, const jerry_value_t function_this, const jerry_value_t arguments[], const jerry_length_t arguments_count)
 {
-  /* There should be at least one argument */
   if (arguments_count > 0)
   {
     /* Convert the first argument to a string (JS "toString" operation) */
@@ -137,11 +125,10 @@ int main (void)
   }
   jerry_release_value (set_result);
 
-  jerry_value_t property_name_joke = jerry_create_string ((const jerry_char_t *) "cat");
-  jerry_value_t property_value_func = jerry_create_external_function (joke_handler);
+  jerry_value_t property_name_cat = jerry_create_string ((const jerry_char_t *) "cat");
+  jerry_value_t property_value_func = jerry_create_external_function (cat_handler);
 
-  /* Add the "joke" property with the function value to the "global" object */
-  set_result = jerry_set_property (global_object, property_name_joke, property_value_func);
+  set_result = jerry_set_property (global_object, property_name_cat, property_value_func);
 
   /* Check if there was no error when adding the property (in this case it should never happen) */
   if (jerry_value_is_error (set_result)) {
