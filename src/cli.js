@@ -34,6 +34,7 @@ MyObject = {
   komplete: function (some)
   {
     print("komplete " + some);
+    return "something";
   },
   compute: function (some)
   {
