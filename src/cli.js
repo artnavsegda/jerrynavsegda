@@ -34,7 +34,15 @@ MyObject = {
   komplete: function (some)
   {
     //print("komplete " + some);
-    return "something";
+
+    if(some)
+    {
+      return "something";
+    }
+    else
+    {
+      print("help\nexit\ncat\nsystem\npipe\n");
+    }
   },
   compute: function (some)
   {
