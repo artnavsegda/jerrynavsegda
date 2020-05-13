@@ -42,6 +42,10 @@ while(running)
     case "cat":
       print(cat(userinput[1]));
     break;
+    case "json":
+      var myjson = JSON.parse(cat(userinput[1]));
+      print(myjson.something);
+    break;
     case "echo":
       print(userinput[1]);
     break;
