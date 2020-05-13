@@ -174,9 +174,16 @@ static jerry_value_t komplete_handler(const jerry_value_t function_object, const
 
 int zc_completion2(int count, int key)
 {
-  const jerry_char_t script[] = "MyObject.komplete(14);";
-  jerry_value_t eval_ret = jerry_eval (script, sizeof (script) - 1, JERRY_PARSE_NO_OPTS);
+  // const jerry_char_t script[] = "MyObject.komplete(14);";
+  // jerry_value_t eval_ret = jerry_eval (script, sizeof (script) - 1, JERRY_PARSE_NO_OPTS);
+  // jerry_release_value (eval_ret);
+
+  char parseline[1000] = "";
+
+  sprintf(parseline,"MyObject.komplete(\"%s\");",rl_line_buffer);
+  jerry_value_t eval_ret = jerry_eval (parseline, strlen (parseline), JERRY_PARSE_NO_OPTS);
   jerry_release_value (eval_ret);
+
 }
 
 int main (void)
