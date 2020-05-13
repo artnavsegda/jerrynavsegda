@@ -33,7 +33,7 @@ MyObject = {
   },
   komplete: function (some)
   {
-    print("komplete " + some);
+    //print("komplete " + some);
     return "something";
   },
   compute: function (some)
@@ -48,6 +48,7 @@ MyObject = {
     {
       case "exit":
         running = false;
+        return 300;
       break;
       case "help":
         print("help: help\nexit: exit\ncat: cat\nsystem: system\npipe: pipe\n");

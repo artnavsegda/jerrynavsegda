@@ -192,7 +192,10 @@ int zc_completion2(int count, int key)
 
   jerry_release_value (eval_ret);
 
-  printf ("Test string: %s\n", string_buffer_p);
+  //printf ("Test string: %s\n", string_buffer_p);
+
+  rl_insert_text(string_buffer_p);
+
   free (string_buffer_p);
 
 }
@@ -345,7 +348,13 @@ int main (void)
   {
     sprintf(parseline,"MyObject.compute(\"%s\");",inputline);
     eval_ret = jerry_eval (parseline, strlen (parseline), JERRY_PARSE_NO_OPTS);
-    printf ("number: %lf\n", jerry_get_number_value (eval_ret));
+
+    if (jerry_get_number_value (eval_ret) == 300.0)
+    {
+      exit(0);
+    }
+
+    //printf ("number: %lf\n", jerry_get_number_value (eval_ret));
     jerry_release_value (eval_ret);
   }
 
