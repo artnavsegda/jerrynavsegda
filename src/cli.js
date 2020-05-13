@@ -22,6 +22,8 @@
 //
 //print(readline());
 
+var i = 10;
+
 MyObject = {
   x: 12,
   y: 'Value of x is ',
@@ -35,7 +37,9 @@ MyObject = {
   },
   compute: function (some)
   {
+    print(i);
     print("compute " + some);
+    i = 11;
   }
 }
 

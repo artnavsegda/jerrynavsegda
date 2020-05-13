@@ -320,11 +320,13 @@ int main (void)
   jerry_release_value (prop_name);
   jerry_release_value (eval_ret);
 
-  while(readline(""))
-  {
-    const jerry_char_t script[] = "MyObject.compute(12);";
+  char * inputline = NULL;
+  char parseline[1000] = "";
 
-    eval_ret = jerry_eval (script, sizeof (script) - 1, JERRY_PARSE_NO_OPTS);
+  while(inputline = readline(">"))
+  {
+    sprintf(parseline,"MyObject.compute(\"%s\");",inputline);
+    eval_ret = jerry_eval (parseline, strlen (parseline), JERRY_PARSE_NO_OPTS);
     jerry_release_value (eval_ret);
   }
 
