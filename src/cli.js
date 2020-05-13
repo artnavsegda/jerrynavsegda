@@ -31,7 +31,7 @@ var contents = [];
 //});
 
 for (var i = 0; i < files.length; i++) {
-  contents[i] = files[i];
+  contents[i] = cat(files[i]);
 }
 
 for (var i = 0; i < contents.length; i++) {
