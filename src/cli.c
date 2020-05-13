@@ -13,14 +13,15 @@ struct my_struct
   const char *msg;
 } my_struct;
 
-static jerry_value_t
-readline_handler (const jerry_value_t function_object,
-               const jerry_value_t function_this,
-               const jerry_value_t arguments[],
-               const jerry_length_t arguments_count)
+static jerry_value_t readline_handler (const jerry_value_t function_object, const jerry_value_t function_this, const jerry_value_t arguments[], const jerry_length_t arguments_count)
 {
   char * buffer = readline(">");
   return jerry_create_string (buffer);
+}
+
+static jerry_value_t cat_handler (const jerry_value_t function_object, const jerry_value_t function_this, const jerry_value_t arguments[], const jerry_length_t arguments_count)
+{
+  return jerry_create_string ("cat");
 }
 
 /**
