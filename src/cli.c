@@ -183,21 +183,27 @@ int zc_completion2(int count, int key)
   sprintf(parseline,"MyObject.komplete(\"%s\");",rl_line_buffer);
   jerry_value_t eval_ret = jerry_eval (parseline, strlen (parseline), JERRY_PARSE_NO_OPTS);
 
-  // Read the string into a byte buffer.
-  jerry_size_t string_size = jerry_get_string_size (eval_ret);
-  jerry_char_t *string_buffer_p = (jerry_char_t *) malloc (sizeof (jerry_char_t) * (string_size + 1));
+  if (jerry_value_is_undefined (eval_ret))
+  {
+    rl_on_new_line();
+  }
+  else
+  {
+    // Read the string into a byte buffer.
+    jerry_size_t string_size = jerry_get_string_size (eval_ret);
+    jerry_char_t *string_buffer_p = (jerry_char_t *) malloc (sizeof (jerry_char_t) * (string_size + 1));
 
-  jerry_size_t copied_bytes = jerry_string_to_char_buffer (eval_ret, string_buffer_p, string_size);
-  string_buffer_p[copied_bytes] = '\0';
+    jerry_size_t copied_bytes = jerry_string_to_char_buffer (eval_ret, string_buffer_p, string_size);
+    string_buffer_p[copied_bytes] = '\0';
 
-  jerry_release_value (eval_ret);
+    jerry_release_value (eval_ret);
 
-  //printf ("Test string: %s\n", string_buffer_p);
+    //printf ("Test string: %s\n", string_buffer_p);
 
-  rl_insert_text(string_buffer_p);
-  rl_on_new_line();
-
-  free (string_buffer_p);
+    rl_insert_text(string_buffer_p);
+    
+    free (string_buffer_p);
+  }
 
 }
 

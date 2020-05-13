@@ -41,7 +41,7 @@ MyObject = {
     }
     else
     {
-      print("help\nexit\ncat\nsystem\npipe\n");
+      print("\nhelp\nexit\ncat\nsystem\npipe");
     }
   },
   compute: function (some)
