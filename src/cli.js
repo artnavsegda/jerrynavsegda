@@ -52,6 +52,9 @@ while(running)
     case "system":
       system(userinput[1]);
     break;
+    case "pipe":
+      pipe(userinput[1]);
+    break;
     default:
       print(userinput[0]);
   }
