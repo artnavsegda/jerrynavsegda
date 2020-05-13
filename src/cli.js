@@ -39,6 +39,9 @@ while(running)
     case "cat":
       print("meow");
     break;
+    case "echo":
+      print(userinput[1]);
+    break;
     default:
       print(userinput[0]);
   }
