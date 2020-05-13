@@ -24,6 +24,8 @@
 
 var i = 10;
 
+var commands = ["help", "exit", "cat", "system", "pipe"];
+
 MyObject = {
   x: 12,
   y: 'Value of x is ',
