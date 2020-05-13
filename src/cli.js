@@ -26,9 +26,9 @@ var running = true;
 //
 while(running)
 {
-  var userinput = readline();
+  var userinput = readline().split(" ");
 
-  switch(userinput)
+  switch(userinput[0])
   {
     case "exit":
       running = false;
@@ -40,6 +40,6 @@ while(running)
       print("meow");
     break;
     default:
-      print(userinput);
+      print(userinput[0]);
   }
 }
