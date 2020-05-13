@@ -53,7 +53,7 @@ while(running)
       system(userinput[1]);
     break;
     case "pipe":
-      pipe(userinput[1]);
+      print(pipe(userinput[1]));
     break;
     default:
       print(userinput[0]);
