@@ -135,23 +135,22 @@ int main (void)
   }
   jerry_release_value (set_result);
 
-  jerry_value_t property_name_cat = jerry_create_string ((const jerry_char_t *) "cat");
-  jerry_value_t property_value_func = jerry_create_external_function (cat_handler);
 
-  set_result = jerry_set_property (global_object, property_name_cat, property_value_func);
+  // ======= cat =======
+
+  set_result = jerry_set_property (global_object, jerry_create_string ((const jerry_char_t *) "cat"), jerry_create_external_function (cat_handler));
 
   /* Check if there was no error when adding the property (in this case it should never happen) */
   if (jerry_value_is_error (set_result)) {
-    printf ("Failed to add the 'joke' property\n");
+    printf ("Failed to add the 'cat' property\n");
   }
 
   jerry_release_value (set_result);
 
-  jerry_value_t property_name_readline = jerry_create_string ((const jerry_char_t *) "readline");
-  jerry_value_t property_value_func_readline = jerry_create_external_function (readline_handler);
+  // ======= readline =======
 
   /* Add the "joke" property with the function value to the "global" object */
-  set_result = jerry_set_property (global_object, property_name_readline, property_value_func_readline);
+  set_result = jerry_set_property (global_object, jerry_create_string ((const jerry_char_t *) "readline"), jerry_create_external_function (readline_handler));
 
   /* Check if there was no error when adding the property (in this case it should never happen) */
   if (jerry_value_is_error (set_result)) {
@@ -160,8 +159,7 @@ int main (void)
 
   jerry_release_value (set_result);
 
-  jerry_release_value (property_name_readline);
-  jerry_release_value (property_value_func_readline);
+  // OVER
 
   /* Releasing string values, as it is no longer necessary outside of engine */
   jerry_release_value (prop_name);
