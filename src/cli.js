@@ -22,6 +22,22 @@
 //
 //print(readline());
 
+var files = ["one.json", "two.json", "three.json"];
+
+var contents = [];
+
+//files.forEach((item, i) => {
+//  print("hello");
+//});
+
+for (var i = 0; i < files.length; i++) {
+  contents[i] = files[i];
+}
+
+for (var i = 0; i < contents.length; i++) {
+  print(contents[i]);
+}
+
 var running = true;
 //
 while(running)
@@ -34,7 +50,7 @@ while(running)
       running = false;
     break;
     case "help":
-      print("help: help\nexit: exit");
+      print("help: help\nexit: exit\ncat: cat\nsystem: system\npipe: pipe\n");
     break;
     case "kitty":
       print("meow");
