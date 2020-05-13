@@ -40,10 +40,10 @@ MyObject = {
     if(some)
     {
       for (var i = 0; i < commands.length; i++) {
-        print(commands[i]);
+        //print(commands[i]);
         if (commands[i].startsWith(some))
         {
-        //  return commands[i];
+          return commands[i];
         }
       }
     }

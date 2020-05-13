@@ -200,7 +200,7 @@ int zc_completion2(int count, int key)
 
     //printf ("Test string: %s\n", string_buffer_p);
 
-    rl_insert_text(string_buffer_p);
+    rl_insert_text(&string_buffer_p[rl_point]);
     
     free (string_buffer_p);
   }
