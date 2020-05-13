@@ -4,7 +4,7 @@
 //
 // print (my_var);
 //
-// joke();
+//joke();
 //
 // var strda = joke("hello.txt");
 //
@@ -38,6 +38,9 @@ while(running)
     break;
     case "cat":
       print("meow");
+    break;
+    case "joke":
+      joke();
     break;
     case "echo":
       print(userinput[1]);
