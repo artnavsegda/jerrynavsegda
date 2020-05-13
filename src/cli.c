@@ -143,16 +143,53 @@ static jerry_value_t pipe_handler(const jerry_value_t function_object, const jer
   return jerry_create_undefined();
 }
 
+static jerry_value_t komplete_handler(const jerry_value_t function_object, const jerry_value_t function_this, const jerry_value_t arguments[], const jerry_length_t arguments_count)
+{
+  /* The the 'this_val' is the 'MyObject' from the JS code below */
+  /* Note: that the argument count check is ignored for the example's case */
+
+  /* Get 'this.x' */
+  jerry_value_t prop_name = jerry_create_string ((const jerry_char_t *) "x");
+  jerry_value_t x_val = jerry_get_property (function_this, prop_name);
+
+  if (!jerry_value_is_error (x_val))
+  {
+    /* Convert Jerry API values to double */
+    double x = jerry_get_number_value (x_val);
+    double d = jerry_get_number_value (arguments[0]);
+
+    /* Add the parameter to 'x' */
+    jerry_value_t res_val = jerry_create_number (x + d);
+
+    /* Set the new value of 'this.x' */
+    jerry_release_value (jerry_set_property (function_this, prop_name, res_val));
+    jerry_release_value (res_val);
+  }
+
+  jerry_release_value (x_val);
+  jerry_release_value (prop_name);
+
+  return jerry_create_undefined ();
+}
+
+int zc_completion2(int count, int key)
+{
+  const jerry_char_t script[] = "MyObject.komplete(14);";
+  jerry_value_t eval_ret = jerry_eval (script, sizeof (script) - 1, JERRY_PARSE_NO_OPTS);
+  jerry_release_value (eval_ret);
+}
+
 int main (void)
 {
   int jsmain = open("./cli.js",O_RDONLY);
 
   struct stat sb;
   fstat(jsmain, &sb);
-  char *buf = malloc(sb.st_size);
+  char *buf = malloc(sb.st_size+2);
 
-  read(jsmain,buf,sb.st_size);
+  read(jsmain,buf,sb.st_size+1);
   close(jsmain);
+  buf[sb.st_size] = '\0';
 
   /* Initializing JavaScript environment */
   jerry_init (JERRY_INIT_EMPTY);
@@ -251,11 +288,45 @@ int main (void)
   /* Releasing the Global object */
   jerry_release_value (global_object);
 
-  /* Now starting script that would output value of just initialized field */
+  rl_bind_key('\t', zc_completion2);
+
   jerry_value_t eval_ret = jerry_eval (buf, strlen(buf), JERRY_PARSE_NO_OPTS);
 
-  /* Free JavaScript value, returned by eval */
+  // jerry_value_t parsed_code = jerry_parse (NULL, 0, buf, strlen (buf), JERRY_PARSE_NO_OPTS);
+  //
+  // /* Check if there is any JS code parse error */
+  // if (!jerry_value_is_error (parsed_code))
+  // {
+  //   /* Execute the parsed source code in the Global scope */
+  //   jerry_value_t ret_value = jerry_run (parsed_code);
+  //
+  //   /* Returned value must be freed */
+  //   jerry_release_value (ret_value);
+  // }
+  // else
+  // {
+  //   puts("error");
+  // }
+
+  /* Parsed source code must be freed */
+  //jerry_release_value (parsed_code);
+
+  //tut
+
+  jerry_value_t komplete_func_obj = jerry_create_external_function(komplete_handler);
+  prop_name = jerry_create_string ((const jerry_char_t *) "komplete123");
+  jerry_release_value (jerry_set_property (eval_ret, prop_name, komplete_func_obj));
+  jerry_release_value (komplete_func_obj);
+  jerry_release_value (prop_name);
   jerry_release_value (eval_ret);
+
+  while(readline(""))
+  {
+    const jerry_char_t script[] = "MyObject.compute(12);";
+
+    eval_ret = jerry_eval (script, sizeof (script) - 1, JERRY_PARSE_NO_OPTS);
+    jerry_release_value (eval_ret);
+  }
 
   /* Freeing engine */
   jerry_cleanup ();
