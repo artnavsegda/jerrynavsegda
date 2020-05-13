@@ -40,6 +40,40 @@ MyObject = {
     print(i);
     print("compute " + some);
     i = 11;
+
+    var userinput = some.split(" ");
+
+    switch(userinput[0])
+    {
+      case "exit":
+        running = false;
+      break;
+      case "help":
+        print("help: help\nexit: exit\ncat: cat\nsystem: system\npipe: pipe\n");
+      break;
+      case "kitty":
+        print("meow");
+      break;
+      case "cat":
+        print(cat(userinput[1]));
+      break;
+      case "json":
+        var myjson = JSON.parse(cat(userinput[1]));
+        print(myjson.something);
+      break;
+      case "echo":
+        print(userinput[1]);
+      break;
+      case "system":
+        system(userinput[1]);
+      break;
+      case "pipe":
+        print(pipe(userinput[1]));
+      break;
+      default:
+        print(userinput[0]);
+    }
+
   }
 }
 
