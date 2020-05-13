@@ -36,6 +36,9 @@ while(running)
     case "help":
       print("help: help\nexit: exit");
     break;
+    case "cat":
+      print("meow");
+    break;
     default:
       print(userinput);
   }
