@@ -46,12 +46,21 @@ static jerry_value_t cat_handler(const jerry_value_t function_object, const jerr
 
     int filetoread = open(buffer,O_RDONLY);
 
-    struct stat sb;
-    fstat(filetoread, &sb);
-    char *filecontent = malloc(sb.st_size);
+    char *filecontent = NULL;
 
-    read(filetoread,filecontent,sb.st_size);
-    close(filetoread);
+    if (filetoread != -1)
+    {
+      struct stat sb;
+      fstat(filetoread, &sb);
+      filecontent = malloc(sb.st_size);
+
+      read(filetoread,filecontent,sb.st_size);
+      close(filetoread);
+    }
+    else
+    {
+      filecontent = "empty";
+    }
 
     printf ("Cat was called with args %s\n", (const char *)buffer);
 
