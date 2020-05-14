@@ -160,11 +160,12 @@ MyObject = {
     for (var i = 0; i < aulist.length; i++) {
       var somejson = JSON.parse(cat(aulist[i]));
       Object.defineProperty(auobject, somejson.title, {value: somejson});
+      if (somejson.acquire === undefined){}
+      else {
+        print(somejson.acquire);
+        print(pipe("./" + somejson.acquire));
+      }
     }
-
-    print(auobject.one.acquire);
-    print(pipe("./" + auobject.one.acquire));
-
   }
 }
 
