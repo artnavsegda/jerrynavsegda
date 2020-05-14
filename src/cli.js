@@ -28,9 +28,12 @@ var commands = ["help", "exit", "cat", "system", "pipe", "list"];
 
 var aulist = [];
 var auobject = {};
+var dataobject = {};
 
 var myotherjson;
 var toparse;
+
+var path = "/"
 
 MyObject = {
   x: 12,
@@ -84,7 +87,7 @@ MyObject = {
 
     var userinput = some.split(" ");
 
-    my_var = "cli" + i + ">";
+    my_var = path + ">";
 
     switch(userinput[0])
     {
@@ -143,7 +146,13 @@ MyObject = {
           {
             var keys = Object.getOwnPropertyNames(auobject[userinput[0]].properties);
             for (var i = 0; i < keys.length; i++) {
-              print(keys[i]);
+              if (dataobject[userinput[0]][keys[i]])
+              {
+                print(keys[i] + ": " + dataobject[userinput[0]][keys[i]]);
+              }
+              else {
+                print(keys[i] + ": empty");
+              }
             }
           }
         }
@@ -156,6 +165,8 @@ MyObject = {
   startup: function ()
   {
     print("starting CLI");
+    my_var = path + ">";
+
     aulist = pipe("./list.sh").split("\n");
     for (var i = 0; i < aulist.length; i++) {
       var somejson = JSON.parse(cat(aulist[i]));
@@ -163,7 +174,9 @@ MyObject = {
       if (somejson.acquire === undefined){}
       else {
         print(somejson.acquire);
-        print(pipe("./" + somejson.acquire));
+        var pipedata = pipe("./" + somejson.acquire);
+        var somejsondata = JSON.parse(pipedata);
+        Object.defineProperty(dataobject, somejson.title, {value: somejsondata});
       }
     }
   }
