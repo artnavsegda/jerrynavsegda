@@ -135,19 +135,13 @@ MyObject = {
 
     }
 
-    //var keys = Object.keys(auobject.one);
-    //print(keys.length);
-    //for (var i = 0; i < keys.length; i++) {
-    //print(keys[0].title);
-    //}
+    var keys = Object.getOwnPropertyNames(auobject);
+    print(keys.length);
 
-    //for(var keyasa in auobject){
-    //  print("hi");
-    //}
-
-    print(auobject.one.title);
-    print(auobject.two.title);
-    print(auobject.three.title);
+    for (var i = 0; i < keys.length; i++) {
+      print(auobject[keys[i]].title);
+      print(auobject[keys[i]].description);
+    }
   }
 }
 
