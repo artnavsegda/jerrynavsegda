@@ -392,6 +392,8 @@ int main (void)
   jerry_release_value (prop_name);
   jerry_release_value (eval_ret);
 
+  jerry_release_value(jerry_eval ("MyObject.startup();", strlen("MyObject.startup();"), JERRY_PARSE_NO_OPTS));
+
   char * inputline = NULL;
   char parseline[1000] = "";
 

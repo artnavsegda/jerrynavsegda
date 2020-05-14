@@ -97,6 +97,10 @@ MyObject = {
         print(userinput[0]);
     }
     return 25;
+  },
+  startup: function ()
+  {
+    print("starting CLI");
   }
 }
 
