@@ -103,9 +103,19 @@ MyObject = {
         print("info");
       break;
       case "list":
-        var keys = Object.getOwnPropertyNames(auobject);
-        for (var i = 0; i < keys.length; i++) {
-          print(auobject[keys[i]].title + ": " + auobject[keys[i]].description);
+        if (userinput[1])
+        {
+          if (auobject[userinput[1]])
+            print(auobject[userinput[1]].title + ": " + auobject[userinput[1]].description);
+          else {
+            print("no item");
+          }
+        }
+        else {
+          var keys = Object.getOwnPropertyNames(auobject);
+          for (var i = 0; i < keys.length; i++) {
+            print(auobject[keys[i]].title + ": " + auobject[keys[i]].description);
+          }
         }
         return 0;
       break;
