@@ -24,10 +24,9 @@
 
 var i = 10;
 
-var commands = ["help", "exit", "cat", "system", "pipe"];
+var commands = ["help", "exit", "cat", "system", "pipe", "list"];
 
 var aulist = [];
-var auobject = {};
 
 var myotherjson;
 var toparse;
@@ -132,6 +131,12 @@ MyObject = {
       var somejson = JSON.parse(cat(aulist[i]));
       print(somejson.something);
     }
+
+    var auobject = {};
+    Object.defineProperty(auobject, 'one', {value: 123});
+    //var test = 321;
+    var test = auobject.one;
+    print(test);
   }
 }
 
