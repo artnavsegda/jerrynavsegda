@@ -27,6 +27,7 @@ var i = 10;
 var commands = ["help", "exit", "cat", "system", "pipe"];
 
 var aulist = [];
+var auobject = {};
 
 var myotherjson;
 var toparse;
