@@ -66,7 +66,8 @@ static jerry_value_t cat_handler(const jerry_value_t function_object, const jerr
       fstat(filetoread, &sb);
       filecontent = malloc(sb.st_size);
 
-      read(filetoread,filecontent,sb.st_size);
+      int length = read(filetoread,filecontent,sb.st_size);
+      filecontent[length] = '\0';
       close(filetoread);
     }
     else
@@ -74,7 +75,7 @@ static jerry_value_t cat_handler(const jerry_value_t function_object, const jerr
       filecontent = "empty";
     }
 
-    printf ("Cat was called with args %s\n", (const char *)buffer);
+    //printf ("Cat was called with args %s\n", (const char *)buffer);
 
     //printf("contents: %s",filecontent);
 

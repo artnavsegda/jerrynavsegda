@@ -28,6 +28,10 @@ var commands = ["help", "exit", "cat", "system", "pipe"];
 
 var aulist = [];
 
+var myotherjson;
+var toparse;
+
+
 MyObject = {
   x: 12,
   y: 'Value of x is ',
@@ -59,8 +63,8 @@ MyObject = {
   },
   compute: function (some)
   {
-    print(i);
-    print("compute " + some);
+    //print(i);
+    //print("compute " + some);
     i = 11;
 
     var userinput = some.split(" ");
@@ -96,12 +100,16 @@ MyObject = {
         print(pipe(userinput[1]));
       break;
       case "list":
-        for (var i = 0; i < aulist.length; i++) {
-          print("file: " + aulist[i]);
-          //print(cat(aulist[i]));
-          //var somejson = JSON.parse(cat(aulist[i]));
-          //print(somejson.something);
+        //print("len " + aulist.length);
+        for (i = 0; i < aulist.length; i++) {
+          //print(i);
+          //print("file: " + aulist[i]);
+          toparse = cat(aulist[i]);
+          //print(toparse);
+          myotherjson = JSON.parse(toparse);
+          print(myotherjson.title);
         }
+        return 0;
       break;
       default:
       {
