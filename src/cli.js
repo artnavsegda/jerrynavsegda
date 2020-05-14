@@ -104,7 +104,9 @@ MyObject = {
         }
       break;
       default:
+      {
         print(userinput[0]);
+      }
     }
     return 25;
   },
