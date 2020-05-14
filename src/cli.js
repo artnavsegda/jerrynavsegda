@@ -103,14 +103,9 @@ MyObject = {
         print("info");
       break;
       case "list":
-        //print("len " + aulist.length);
-        for (i = 0; i < aulist.length; i++) {
-          //print(i);
-          //print("file: " + aulist[i]);
-          toparse = cat(aulist[i]);
-          //print(toparse);
-          myotherjson = JSON.parse(toparse);
-          print(myotherjson.title);
+        var keys = Object.getOwnPropertyNames(auobject);
+        for (var i = 0; i < keys.length; i++) {
+          print(auobject[keys[i]].title + ": " + auobject[keys[i]].description);
         }
         return 0;
       break;
@@ -126,21 +121,8 @@ MyObject = {
     print("starting CLI");
     aulist = pipe("./list.sh").split("\n");
     for (var i = 0; i < aulist.length; i++) {
-      //print("file: " + aulist[i]);
-      //print(cat(aulist[i]));
       var somejson = JSON.parse(cat(aulist[i]));
-      //print(somejson.something);
-
       Object.defineProperty(auobject, somejson.title, {value: somejson});
-
-    }
-
-    var keys = Object.getOwnPropertyNames(auobject);
-    print(keys.length);
-
-    for (var i = 0; i < keys.length; i++) {
-      print(auobject[keys[i]].title);
-      print(auobject[keys[i]].description);
     }
   }
 }
