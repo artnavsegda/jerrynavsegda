@@ -30,6 +30,9 @@ var aulist = [];
 var auobject = {};
 var dataobject = {};
 
+var auocurrent = {};
+var datacurrent = {};
+
 var myotherjson;
 var toparse;
 
@@ -139,16 +142,16 @@ MyObject = {
       break;
       default:
       {
-        if (auobject[userinput[0]])
+        if (auocurrent[userinput[0]])
         {
-          print(auobject[userinput[0]].title + ": " + auobject[userinput[0]].description);
-          if (auobject[userinput[0]].properties)
+          print(auocurrent[userinput[0]].title + ": " + auocurrent[userinput[0]].description);
+          if (auocurrent[userinput[0]].properties)
           {
-            var keys = Object.getOwnPropertyNames(auobject[userinput[0]].properties);
+            var keys = Object.getOwnPropertyNames(auocurrent[userinput[0]].properties);
             for (var i = 0; i < keys.length; i++) {
-              if (dataobject[userinput[0]][keys[i]])
+              if (datacurrent[userinput[0]][keys[i]])
               {
-                print(keys[i] + ": " + dataobject[userinput[0]][keys[i]]);
+                print(keys[i] + ": " + datacurrent[userinput[0]][keys[i]]);
               }
               else {
                 print(keys[i] + ": empty");
@@ -179,6 +182,8 @@ MyObject = {
         Object.defineProperty(dataobject, somejson.title, {value: somejsondata});
       }
     }
+    auocurrent = auobject;
+    datacurrent = dataobject;
   }
 }
 
