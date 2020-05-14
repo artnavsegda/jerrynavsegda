@@ -201,7 +201,7 @@ int zc_completion2(int count, int key)
     //printf ("Test string: %s\n", string_buffer_p);
 
     rl_insert_text(&string_buffer_p[rl_point]);
-    
+
     free (string_buffer_p);
   }
 
@@ -351,8 +351,12 @@ int main (void)
   char * inputline = NULL;
   char parseline[1000] = "";
 
-  while(inputline = readline(">"))
+  while(1)
   {
+    inputline = readline(">");
+    if (!inputline)
+      break;
+
     sprintf(parseline,"MyObject.compute(\"%s\");",inputline);
     eval_ret = jerry_eval (parseline, strlen (parseline), JERRY_PARSE_NO_OPTS);
 
