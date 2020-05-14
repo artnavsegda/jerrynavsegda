@@ -99,6 +99,9 @@ MyObject = {
       case "pipe":
         print(pipe(userinput[1]));
       break;
+      case "info":
+        print("info");
+      break;
       case "list":
         //print("len " + aulist.length);
         for (i = 0; i < aulist.length; i++) {
