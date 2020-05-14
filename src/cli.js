@@ -26,6 +26,8 @@ var i = 10;
 
 var commands = ["help", "exit", "cat", "system", "pipe"];
 
+var aulist = [];
+
 MyObject = {
   x: 12,
   y: 'Value of x is ',
@@ -93,6 +95,14 @@ MyObject = {
       case "pipe":
         print(pipe(userinput[1]));
       break;
+      case "list":
+        for (var i = 0; i < aulist.length; i++) {
+          print("file: " + aulist[i]);
+          //print(cat(aulist[i]));
+          //var somejson = JSON.parse(cat(aulist[i]));
+          //print(somejson.something);
+        }
+      break;
       default:
         print(userinput[0]);
     }
@@ -101,10 +111,12 @@ MyObject = {
   startup: function ()
   {
     print("starting CLI");
-    var aulist = pipe("./list.sh").split("\n");
+    aulist = pipe("./list.sh").split("\n");
     for (var i = 0; i < aulist.length; i++) {
       print("file: " + aulist[i]);
       print(cat(aulist[i]));
+      var somejson = JSON.parse(cat(aulist[i]));
+      print(somejson.something);
     }
   }
 }
