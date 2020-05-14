@@ -27,10 +27,10 @@ var i = 10;
 var commands = ["help", "exit", "cat", "system", "pipe", "list"];
 
 var aulist = [];
+var auobject = {};
 
 var myotherjson;
 var toparse;
-
 
 MyObject = {
   x: 12,
@@ -126,17 +126,28 @@ MyObject = {
     print("starting CLI");
     aulist = pipe("./list.sh").split("\n");
     for (var i = 0; i < aulist.length; i++) {
-      print("file: " + aulist[i]);
-      print(cat(aulist[i]));
+      //print("file: " + aulist[i]);
+      //print(cat(aulist[i]));
       var somejson = JSON.parse(cat(aulist[i]));
-      print(somejson.something);
+      //print(somejson.something);
+
+      Object.defineProperty(auobject, somejson.title, {value: somejson});
+
     }
 
-    var auobject = {};
-    Object.defineProperty(auobject, 'one', {value: 123});
-    //var test = 321;
-    var test = auobject.one;
-    print(test);
+    //var keys = Object.keys(auobject.one);
+    //print(keys.length);
+    //for (var i = 0; i < keys.length; i++) {
+    //print(keys[0].title);
+    //}
+
+    //for(var keyasa in auobject){
+    //  print("hi");
+    //}
+
+    print(auobject.one.title);
+    print(auobject.two.title);
+    print(auobject.three.title);
   }
 }
 
