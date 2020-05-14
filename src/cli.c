@@ -223,12 +223,26 @@ int main (void)
   char path[PATH_MAX];
   getcwd(path,PATH_MAX);
   struct dirent **dirs;
+
+  char *buf = NULL;
+  int bufsize = 0;
+
   int n = scandir(path,&dirs,fileselect,alphasort);
   if (n >= 0)
   {
     for (int cnt = 0;cnt < n;++cnt)
     {
-      puts(dirs[cnt]->d_name);
+      //puts(dirs[cnt]->d_name);
+      int jsmain = open(dirs[cnt]->d_name,O_RDONLY);
+      struct stat sb;
+      fstat(jsmain, &sb);
+
+      buf = realloc(buf, bufsize+sb.st_size+2);
+      read(jsmain,&buf[bufsize],sb.st_size+1);
+      bufsize = bufsize+sb.st_size;
+      buf[bufsize] = '\0';
+      close(jsmain);
+
     }
   }
   else
@@ -236,18 +250,18 @@ int main (void)
     printf("Cannot find files in %s\n", path);
   }
 
-  int jsmain = open("./cli.js",O_RDONLY);
+  // int jsmain = open("./cli.js",O_RDONLY);
+  //
+  // struct stat sb;
+  // fstat(jsmain, &sb);
+  // char *buf = malloc(sb.st_size+2);
+  //
+  // read(jsmain,buf,sb.st_size+1);
+  // close(jsmain);
+  // buf[sb.st_size] = '\0';
 
-  struct stat sb;
-  fstat(jsmain, &sb);
-  char *buf = malloc(sb.st_size+2);
-
-  read(jsmain,buf,sb.st_size+1);
-  close(jsmain);
-  buf[sb.st_size] = '\0';
-
-  puts(buf);
-  exit(0);
+  //puts(buf);
+  //exit(0);
 
   /* Initializing JavaScript environment */
   jerry_init (JERRY_INIT_EMPTY);
