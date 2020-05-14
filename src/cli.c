@@ -246,7 +246,8 @@ int main (void)
   close(jsmain);
   buf[sb.st_size] = '\0';
 
-
+  puts(buf);
+  exit(0);
 
   /* Initializing JavaScript environment */
   jerry_init (JERRY_INIT_EMPTY);
