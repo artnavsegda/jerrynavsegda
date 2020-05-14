@@ -52,6 +52,15 @@ MyObject = {
           return commands[i];
         }
       }
+
+      var keys = Object.getOwnPropertyNames(auobject);
+      for (var i = 0; i < keys.length; i++) {
+        if (keys[i].startsWith(some))
+        {
+          return keys[i];
+        }
+      }
+
     }
     else
     {
