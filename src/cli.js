@@ -154,6 +154,10 @@ MyObject = {
       var somejson = JSON.parse(cat(aulist[i]));
       Object.defineProperty(auobject, somejson.title, {value: somejson});
     }
+
+    print(auobject.one.acquire);
+    print(pipe("./" + auobject.one.acquire));
+
   }
 }
 
