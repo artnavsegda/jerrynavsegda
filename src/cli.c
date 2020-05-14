@@ -4,10 +4,21 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <linux/limits.h>
+#include <dirent.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "jerryscript.h"
 #include "jerryscript-ext/handler.h"
+
+static int fileselect(const struct dirent *entry)
+{
+  char *ptr = rindex((char *)entry->d_name, '.');
+  if ((ptr!=NULL) && ((strcmp(ptr,".js")==0)))
+    return 1;
+  else
+    return 0;
+}
 
 struct my_struct
 {
@@ -75,7 +86,7 @@ static jerry_value_t cat_handler(const jerry_value_t function_object, const jerr
     return returnvalue;
   }
   else
-    printf ("Joke handler was called\n");
+    printf ("Cat handler was called\n");
 
   /* Return an "undefined" value to the JavaScript engine */
   return jerry_create_undefined();
@@ -209,6 +220,22 @@ int zc_completion2(int count, int key)
 
 int main (void)
 {
+  char path[PATH_MAX];
+  getcwd(path,PATH_MAX);
+  struct dirent **dirs;
+  int n = scandir(path,&dirs,fileselect,alphasort);
+  if (n >= 0)
+  {
+    for (int cnt = 0;cnt < n;++cnt)
+    {
+      puts(dirs[cnt]->d_name);
+    }
+  }
+  else
+  {
+    printf("Cannot find files in %s\n", path);
+  }
+
   int jsmain = open("./cli.js",O_RDONLY);
 
   struct stat sb;
@@ -218,6 +245,8 @@ int main (void)
   read(jsmain,buf,sb.st_size+1);
   close(jsmain);
   buf[sb.st_size] = '\0';
+
+
 
   /* Initializing JavaScript environment */
   jerry_init (JERRY_INIT_EMPTY);
