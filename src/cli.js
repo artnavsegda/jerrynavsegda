@@ -101,6 +101,11 @@ MyObject = {
   startup: function ()
   {
     print("starting CLI");
+    var aulist = pipe("./list.sh").split("\n");
+    for (var i = 0; i < aulist.length; i++) {
+      print("file: " + aulist[i]);
+      print(cat(aulist[i]));
+    }
   }
 }
 
