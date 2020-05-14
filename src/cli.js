@@ -139,6 +139,13 @@ MyObject = {
         if (auobject[userinput[0]])
         {
           print(auobject[userinput[0]].title + ": " + auobject[userinput[0]].description);
+          if (auobject[userinput[0]].properties)
+          {
+            var keys = Object.getOwnPropertyNames(auobject[userinput[0]].properties);
+            for (var i = 0; i < keys.length; i++) {
+              print(keys[i]);
+            }
+          }
         }
         else
           print(userinput[0]);
