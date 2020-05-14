@@ -63,6 +63,8 @@ MyObject = {
 
     var userinput = some.split(" ");
 
+    my_var = "cli" + i + ">";
+
     switch(userinput[0])
     {
       case "exit":

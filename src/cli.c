@@ -252,7 +252,7 @@ int main (void)
 
   /* Constructing strings */
   prop_name = jerry_create_string ((const jerry_char_t *) "my_var");
-  jerry_value_t prop_value = jerry_create_string ((const jerry_char_t *) "Hello from C!");
+  jerry_value_t prop_value = jerry_create_string ((const jerry_char_t *) "cli>");
 
   /* Setting the string value as a property of the Global object */
   jerry_value_t set_result = jerry_set_property (global_object, prop_name, prop_value);
@@ -353,7 +353,19 @@ int main (void)
 
   while(1)
   {
-    inputline = readline(">");
+    global_object = jerry_get_global_object();
+    prop_name = jerry_create_string ((const jerry_char_t *) "my_var");
+    prop_value = jerry_get_property (global_object, prop_name);
+
+    jerry_size_t string_size = jerry_get_string_size (prop_value);
+    jerry_char_t *string_buffer_p = (jerry_char_t *) malloc (sizeof (jerry_char_t) * (string_size + 1));
+    jerry_size_t copied_bytes = jerry_string_to_char_buffer (prop_value, string_buffer_p, string_size);
+
+    string_buffer_p[copied_bytes] = '\0';
+
+    //char prompt[] = ">";
+    //inputline = readline(prompt);
+    inputline = readline(string_buffer_p);
     if (!inputline)
       break;
 
@@ -367,6 +379,10 @@ int main (void)
 
     //printf ("number: %lf\n", jerry_get_number_value (eval_ret));
     jerry_release_value (eval_ret);
+
+    jerry_release_value (prop_value);
+    jerry_release_value (prop_name);
+    jerry_release_value (global_object);
   }
 
   /* Freeing engine */
