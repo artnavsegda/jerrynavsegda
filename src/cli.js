@@ -59,6 +59,12 @@ MyObject = {
       for (var i = 0; i < commands.length; i++) {
         print(commands[i]);
       }
+
+      var keys = Object.getOwnPropertyNames(auobject);
+      for (var i = 0; i < keys.length; i++) {
+        print(keys[i]);
+      }
+
     }
   },
   compute: function (some)
@@ -121,7 +127,12 @@ MyObject = {
       break;
       default:
       {
-        print(userinput[0]);
+        if (auobject[userinput[0]])
+        {
+          print(auobject[userinput[0]].title + ": " + auobject[userinput[0]].description);
+        }
+        else
+          print(userinput[0]);
       }
     }
     return 25;
