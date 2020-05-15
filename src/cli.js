@@ -22,7 +22,7 @@
 //
 //print(readline());
 
-require ('my_custom_module');
+var somenumber = require ('my_custom_module');
 
 var i = 10;
 
@@ -170,6 +170,7 @@ MyObject = {
   startup: function ()
   {
     print("starting CLI");
+    print(somenumber);
     my_var = path + ">";
 
     aulist = pipe("./list.sh").split("\n");
