@@ -22,6 +22,8 @@
 //
 //print(readline());
 
+require ('my_custom_module');
+
 var i = 10;
 
 var commands = ["help", "exit", "cat", "system", "pipe", "list"];

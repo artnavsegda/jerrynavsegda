@@ -10,6 +10,9 @@
 #include <readline/history.h>
 #include "jerryscript.h"
 #include "jerryscript-ext/handler.h"
+#include "jerryscript-ext/module.h"
+
+extern void my_custom_module_register (void);
 
 static int fileselect(const struct dirent *entry)
 {
@@ -219,6 +222,21 @@ int zc_completion2(int count, int key)
 
 }
 
+static const jerryx_module_resolver_t *resolvers[1] =
+{
+  &jerryx_module_native_resolver
+};
+
+static jerry_value_t handle_require (const jerry_value_t js_function, const jerry_value_t this_val, const jerry_value_t args_p[], const jerry_length_t args_count)
+{
+  (void) js_function;
+  (void) this_val;
+  (void) args_count;
+  jerry_value_t return_value = 0;
+  return_value = jerryx_module_resolve (args_p[0], resolvers, 1);
+  return return_value;
+}
+
 int main (void)
 {
   char path[PATH_MAX];
@@ -227,6 +245,8 @@ int main (void)
 
   char *buf = NULL;
   int bufsize = 0;
+
+  my_custom_module_register();
 
   int n = scandir(path,&dirs,fileselect,alphasort);
   if (n >= 0)
@@ -287,6 +307,12 @@ int main (void)
 
   /* Wrap the JS object (not empty anymore) into a jerry api value */
   jerry_value_t global_object = jerry_get_global_object ();
+
+  func_obj = jerry_create_external_function (handle_require);
+  prop_name = jerry_create_string ((const jerry_char_t *) "require");
+  jerry_release_value (jerry_set_property (global_object, prop_name, func_obj));
+  jerry_release_value (prop_name);
+  jerry_release_value (func_obj);
 
   /* Add the JS object to the global context */
   prop_name = jerry_create_string ((const jerry_char_t *) "MyObject");
