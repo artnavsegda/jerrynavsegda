@@ -9,6 +9,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <assert.h>
+#include "jerryscript-config.h"
 #include "jerryscript.h"
 #include "jerryscript-ext/handler.h"
 #include "jerryscript-ext/module.h"
@@ -356,6 +357,9 @@ static void print_unhandled_exception (jerry_value_t error_value) /**< error val
 
 int main (void)
 {
+  printf("ES6 status is %d\n", JERRY_ES2015);
+  printf("module status is %d\n", JERRY_ES2015_MODULE_SYSTEM);
+
   jerry_port_default_set_log_level(JERRY_LOG_LEVEL_TRACE);
   //jerry_port_log(JERRY_LOG_LEVEL_ERROR, "shit");
 

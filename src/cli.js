@@ -22,7 +22,7 @@
 //
 //print(readline());
 
-//var exported_value = 42;
+var exported_value = 42;
 //export { exported_value };
 //import { exported_value } from "./module.js";
 
