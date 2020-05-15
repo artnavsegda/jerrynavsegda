@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "jerryscript.h"
+#include "jerryscript-ext/handler.h"
 
 static void print_unhandled_exception (jerry_value_t error_value) /**< error value */
 {
@@ -135,34 +136,54 @@ int nomain (void)
   return (ret_value ? 0 : 1);
 }
 
-int
-main (void)
+int main (void)
 {
   bool run_ok = false;
 
-  const jerry_char_t script[] = "var str = 'Hello, World!';";
+  //const jerry_char_t script[] = "print ('Hello, World!');";
+  const jerry_char_t script[] = "import { exported_value } from \"./module.js\"; print(exported_value)";
 
   /* Initialize engine */
   jerry_init (JERRY_INIT_EMPTY);
 
+  /* Register 'print' function from the extensions to the global object */
+  jerryx_handler_register_global ((const jerry_char_t *) "print", jerryx_handler_print);
+
   /* Setup Global scope code */
-  jerry_value_t parsed_code = jerry_parse (NULL, 0, script, sizeof (script) - 1, JERRY_PARSE_NO_OPTS);
+  jerry_value_t ret_val = jerry_parse (NULL, 0, script, sizeof (script) - 1, JERRY_PARSE_NO_OPTS);
 
-  /* Check if there is any JS code parse error */
-  if (!jerry_value_is_error (parsed_code))
+  if (!jerry_value_is_error (ret_val))
   {
-    /* Execute the parsed source code in the Global scope */
-    jerry_value_t ret_value = jerry_run (parsed_code);
-
-    /* Check the execution return value if there is any error */
-    run_ok = !jerry_value_is_error (ret_value);
-
-    /* Returned value must be freed */
-    jerry_release_value (ret_value);
+    jerry_value_t func_val = ret_val;
+    ret_val = jerry_run (func_val);
+    jerry_release_value (func_val);
   }
 
-  /* Parsed source code must be freed */
-  jerry_release_value (parsed_code);
+  if (!jerry_value_is_error (ret_val))
+  {
+    /* Print return value */
+    const jerry_value_t args[] = { ret_val };
+    jerry_value_t ret_val_print = jerryx_handler_print (jerry_create_undefined (),
+                                                        jerry_create_undefined (),
+                                                        args,
+                                                        1);
+    jerry_release_value (ret_val_print);
+    jerry_release_value (ret_val);
+    ret_val = jerry_run_all_enqueued_jobs ();
+
+    if (jerry_value_is_error (ret_val))
+    {
+      ret_val = jerry_get_value_from_error (ret_val, true);
+      print_unhandled_exception (ret_val);
+    }
+  }
+  else
+  {
+    ret_val = jerry_get_value_from_error (ret_val, true);
+    print_unhandled_exception (ret_val);
+  }
+
+  jerry_release_value (ret_val);
 
   /* Cleanup engine */
   jerry_cleanup ();
