@@ -239,52 +239,50 @@ static jerry_value_t handle_require (const jerry_value_t js_function, const jerr
 
 int main (void)
 {
-  char path[PATH_MAX];
-  getcwd(path,PATH_MAX);
-  struct dirent **dirs;
-
-  char *buf = NULL;
-  int bufsize = 0;
-
-  my_custom_module_register();
-
-  int n = scandir(path,&dirs,fileselect,alphasort);
-  if (n >= 0)
-  {
-    for (int cnt = 0;cnt < n;++cnt)
-    {
-      //puts(dirs[cnt]->d_name);
-      int jsmain = open(dirs[cnt]->d_name,O_RDONLY);
-      struct stat sb;
-      fstat(jsmain, &sb);
-
-      buf = realloc(buf, bufsize+sb.st_size+2);
-      read(jsmain,&buf[bufsize],sb.st_size+1);
-      bufsize = bufsize+sb.st_size;
-      buf[bufsize] = '\0';
-      close(jsmain);
-
-    }
-  }
-  else
-  {
-    printf("Cannot find files in %s\n", path);
-  }
-
-  // int jsmain = open("./cli.js",O_RDONLY);
+  // multi load
+  // char path[PATH_MAX];
+  // getcwd(path,PATH_MAX);
+  // struct dirent **dirs;
   //
-  // struct stat sb;
-  // fstat(jsmain, &sb);
-  // char *buf = malloc(sb.st_size+2);
+  // char *buf = NULL;
+  // int bufsize = 0;
   //
-  // read(jsmain,buf,sb.st_size+1);
-  // close(jsmain);
-  // buf[sb.st_size] = '\0';
+  // int n = scandir(path,&dirs,fileselect,alphasort);
+  // if (n >= 0)
+  // {
+  //   for (int cnt = 0;cnt < n;++cnt)
+  //   {
+  //     int jsmain = open(dirs[cnt]->d_name,O_RDONLY);
+  //     struct stat sb;
+  //     fstat(jsmain, &sb);
+  //
+  //     buf = realloc(buf, bufsize+sb.st_size+2);
+  //     read(jsmain,&buf[bufsize],sb.st_size+1);
+  //     bufsize = bufsize+sb.st_size;
+  //     buf[bufsize] = '\0';
+  //     close(jsmain);
+  //
+  //   }
+  // }
+  // else
+  // {
+  //   printf("Cannot find files in %s\n", path);
+  // }
 
-  //puts(buf);
-  //exit(0);
+  // single load
+
+  int jsmain = open("./cli.js",O_RDONLY);
+
+  struct stat sb;
+  fstat(jsmain, &sb);
+  char *buf = malloc(sb.st_size+2);
+
+  read(jsmain,buf,sb.st_size+1);
+  close(jsmain);
+  buf[sb.st_size] = '\0';
 
   /* Initializing JavaScript environment */
+  my_custom_module_register();
   jerry_init (JERRY_INIT_EMPTY);
 
   /* Register 'print' function from the extensions */

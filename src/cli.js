@@ -170,7 +170,7 @@ MyObject = {
   startup: function ()
   {
     print("starting CLI");
-    print(somenumber);
+    //print(somenumber);
     my_var = path + ">";
 
     aulist = pipe("./list.sh").split("\n");
