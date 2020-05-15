@@ -22,7 +22,11 @@
 //
 //print(readline());
 
-var somenumber = require ('my_custom_module');
+//var exported_value = 42;
+//export { exported_value };
+//import { exported_value } from "./module.js";
+
+//var somenumber = require ('my_custom_module');
 
 var i = 10;
 
