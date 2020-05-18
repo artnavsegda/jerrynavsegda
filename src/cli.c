@@ -355,6 +355,25 @@ static void print_unhandled_exception (jerry_value_t error_value) /**< error val
   jerry_release_value (err_str_val);
 } /* print_unhandled_exception */
 
+/**
+ * Register a JavaScript function in the global object.
+ */
+static void
+register_js_function (const char *name_p, /**< name of the function */
+                      jerry_external_handler_t handler_p) /**< function callback */
+{
+  jerry_value_t result_val = jerryx_handler_register_global ((const jerry_char_t *) name_p, handler_p);
+
+  if (jerry_value_is_error (result_val))
+  {
+    jerry_port_log (JERRY_LOG_LEVEL_WARNING, "Warning: failed to register '%s' method.", name_p);
+    result_val = jerry_get_value_from_error (result_val, true);
+    print_unhandled_exception (result_val);
+  }
+
+  jerry_release_value (result_val);
+} /* register_js_function */
+
 jerry_value_t execute(char *buf)
 {
   //jerry_value_t eval_ret = jerry_parse (NULL, 0, buf, sizeof (buf) - 1, JERRY_PARSE_NO_OPTS);
@@ -480,7 +499,9 @@ int main (void)
 
 
   /* Register 'print' function from the extensions */
-  jerryx_handler_register_global ((const jerry_char_t *) "print", jerryx_handler_print);
+  //jerryx_handler_register_global ((const jerry_char_t *) "print", jerryx_handler_print);
+
+  register_js_function("print", jerryx_handler_print);
 
   /* Do something with the native object */
   my_struct.msg = "Hello native object!";
@@ -525,52 +546,10 @@ int main (void)
   }
   jerry_release_value (set_result);
 
-  // ======= cat =======
-
-  set_result = jerry_set_property (global_object, jerry_create_string ((const jerry_char_t *) "cat"), jerry_create_external_function (cat_handler));
-
-  /* Check if there was no error when adding the property (in this case it should never happen) */
-  if (jerry_value_is_error (set_result)) {
-    printf ("Failed to add the 'cat' property\n");
-  }
-
-  jerry_release_value (set_result);
-
-  // ======= system =======
-
-  set_result = jerry_set_property (global_object, jerry_create_string ((const jerry_char_t *) "system"), jerry_create_external_function (system_handler));
-
-  /* Check if there was no error when adding the property (in this case it should never happen) */
-  if (jerry_value_is_error (set_result)) {
-    printf ("Failed to add the 'system' property\n");
-  }
-
-  jerry_release_value (set_result);
-
-  // ======= pipe =======
-
-  set_result = jerry_set_property (global_object, jerry_create_string ((const jerry_char_t *) "pipe"), jerry_create_external_function (pipe_handler));
-
-  /* Check if there was no error when adding the property (in this case it should never happen) */
-  if (jerry_value_is_error (set_result)) {
-    printf ("Failed to add the 'pipe' property\n");
-  }
-
-  jerry_release_value (set_result);
-
-  // ======= readline =======
-
-  /* Add the "joke" property with the function value to the "global" object */
-  set_result = jerry_set_property (global_object, jerry_create_string ((const jerry_char_t *) "readline"), jerry_create_external_function (readline_handler));
-
-  /* Check if there was no error when adding the property (in this case it should never happen) */
-  if (jerry_value_is_error (set_result)) {
-    printf ("Failed to add the 'readline' property\n");
-  }
-
-  jerry_release_value (set_result);
-
-  // OVER
+  register_js_function("cat", cat_handler);
+  register_js_function("system", system_handler);
+  register_js_function("pipe", pipe_handler);
+  register_js_function("readline", readline_handler);
 
   /* Releasing string values, as it is no longer necessary outside of engine */
   jerry_release_value (prop_name);
