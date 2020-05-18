@@ -552,8 +552,30 @@ int main (void)
     puts("error");
   }
 
+  if (!jerry_value_is_error (eval_ret))
+  {
+    /* Print return value */
+    const jerry_value_t args[] = { eval_ret };
+    jerry_value_t ret_val_print = jerryx_handler_print (jerry_create_undefined (), jerry_create_undefined (), args, 1);
+    jerry_release_value (ret_val_print);
+    jerry_release_value (eval_ret);
+    eval_ret = jerry_run_all_enqueued_jobs ();
+
+    if (jerry_value_is_error (eval_ret))
+    {
+      eval_ret = jerry_get_value_from_error (eval_ret, true);
+      print_unhandled_exception (eval_ret);
+    }
+  }
+  else
+  {
+    eval_ret = jerry_get_value_from_error (eval_ret, true);
+    print_unhandled_exception (eval_ret);
+  }
+
+
   /* Parsed source code must be freed */
-  //jerry_release_value (parsed_code);
+  jerry_release_value (eval_ret);
 
   //tut
 
