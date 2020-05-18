@@ -234,9 +234,6 @@ static const jerryx_module_resolver_t *resolvers[1] =
 
 static jerry_value_t handle_require (const jerry_value_t js_function, const jerry_value_t this_val, const jerry_value_t args_p[], const jerry_length_t args_count)
 {
-  (void) js_function;
-  (void) this_val;
-  (void) args_count;
   jerry_value_t return_value = 0;
   return_value = jerryx_module_resolve (args_p[0], resolvers, 1);
   return return_value;
