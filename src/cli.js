@@ -101,7 +101,7 @@ MyObject = {
     switch(userinput[0])
     {
       case "exit":
-        running = false;
+        //running = false;
         return 300;
       break;
       case "help":
