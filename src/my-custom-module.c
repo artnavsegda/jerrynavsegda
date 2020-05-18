@@ -15,6 +15,7 @@
 
 #include "jerryscript.h"
 #include "jerryscript-ext/module.h"
+#include "jerryscript-ext/handler.h"
 
 #define MODULE_NAME my_custom_module
 
@@ -23,15 +24,22 @@ static jerry_value_t very_useful_function(const jerry_value_t func_value, const 
   return jerry_create_number (420);
 }
 
+static void register_module_js_function (jerry_value_t module, const char *name_p, jerry_external_handler_t handler_p)
+{
+  jerry_value_t func_obj = jerry_create_external_function (handler_p);
+  jerry_release_value (jerryx_set_property_str (module, name_p, func_obj));
+  jerry_release_value (func_obj);
+} /* register_module_js_function */
+
 static jerry_value_t my_custom_module_on_resolve (void)
 {
   jerry_value_t object = jerry_create_object ();
-  jerry_value_t func_obj = jerry_create_external_function (very_useful_function);
-  jerry_value_t prop_name = jerry_create_string ((const jerry_char_t *) "myFunc");
 
-  jerry_release_value (jerry_set_property (object, prop_name, func_obj));
-  jerry_release_value (prop_name);
-  jerry_release_value (func_obj);
+  register_module_js_function(object, "myFunc", very_useful_function);
+
+  //jerry_value_t func_obj = jerry_create_external_function (very_useful_function);
+  //jerry_release_value (jerryx_set_property_str (object, "myFunc", func_obj));
+  //jerry_release_value (func_obj);
 
   return object;
   //return jerry_create_number (42);

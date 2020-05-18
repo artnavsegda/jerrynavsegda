@@ -358,9 +358,7 @@ static void print_unhandled_exception (jerry_value_t error_value) /**< error val
 /**
  * Register a JavaScript function in the global object.
  */
-static void
-register_js_function (const char *name_p, /**< name of the function */
-                      jerry_external_handler_t handler_p) /**< function callback */
+static void register_js_function (const char *name_p, jerry_external_handler_t handler_p)
 {
   jerry_value_t result_val = jerryx_handler_register_global ((const jerry_char_t *) name_p, handler_p);
 
