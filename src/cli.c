@@ -355,6 +355,62 @@ static void print_unhandled_exception (jerry_value_t error_value) /**< error val
   jerry_release_value (err_str_val);
 } /* print_unhandled_exception */
 
+void execute(char *buf)
+{
+  //jerry_value_t eval_ret = jerry_parse (NULL, 0, buf, sizeof (buf) - 1, JERRY_PARSE_NO_OPTS);
+
+  //jerry_value_t eval_ret = jerry_eval (buf, strlen(buf), JERRY_PARSE_NO_OPTS);
+
+  jerry_value_t eval_ret = jerry_parse (NULL, 0, buf, strlen (buf), JERRY_PARSE_NO_OPTS);
+
+
+  // if (!jerry_value_is_error (eval_ret))
+  // {
+  //   jerry_value_t func_val = eval_ret;
+  //   eval_ret = jerry_run (func_val);
+  //   jerry_release_value (func_val);
+  // }
+
+  /* Check if there is any JS code parse error */
+  if (!jerry_value_is_error (eval_ret))
+  {
+    /* Execute the parsed source code in the Global scope */
+    jerry_value_t ret_value = jerry_run (eval_ret);
+
+    /* Returned value must be freed */
+    jerry_release_value (ret_value);
+  }
+  else
+  {
+    puts("error");
+  }
+
+  if (!jerry_value_is_error (eval_ret))
+  {
+    /* Print return value */
+    const jerry_value_t args[] = { eval_ret };
+    jerry_value_t ret_val_print = jerryx_handler_print (jerry_create_undefined (), jerry_create_undefined (), args, 1);
+    jerry_release_value (ret_val_print);
+    jerry_release_value (eval_ret);
+    eval_ret = jerry_run_all_enqueued_jobs ();
+
+    if (jerry_value_is_error (eval_ret))
+    {
+      eval_ret = jerry_get_value_from_error (eval_ret, true);
+      print_unhandled_exception (eval_ret);
+    }
+  }
+  else
+  {
+    eval_ret = jerry_get_value_from_error (eval_ret, true);
+    print_unhandled_exception (eval_ret);
+  }
+
+
+  /* Parsed source code must be freed */
+  jerry_release_value (eval_ret);
+}
+
 int main (void)
 {
   printf("ES6 status is %d\n", JERRY_ES2015);
