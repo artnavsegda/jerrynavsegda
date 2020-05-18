@@ -519,11 +519,13 @@ int main (void)
   /* Wrap the JS object (not empty anymore) into a jerry api value */
   jerry_value_t global_object = jerry_get_global_object ();
 
-  func_obj = jerry_create_external_function (handle_require);
-  prop_name = jerry_create_string ((const jerry_char_t *) "require");
-  jerry_release_value (jerry_set_property (global_object, prop_name, func_obj));
-  jerry_release_value (prop_name);
-  jerry_release_value (func_obj);
+  register_js_function("require", handle_require);
+
+  // func_obj = jerry_create_external_function (handle_require);
+  // prop_name = jerry_create_string ((const jerry_char_t *) "require");
+  // jerry_release_value (jerry_set_property (global_object, prop_name, func_obj));
+  // jerry_release_value (prop_name);
+  // jerry_release_value (func_obj);
 
   /* Add the JS object to the global context */
   prop_name = jerry_create_string ((const jerry_char_t *) "MyObject");
