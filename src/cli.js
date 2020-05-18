@@ -25,7 +25,7 @@
 //var exported_value = 42;
 //export { exported_value };
 import { exported_value } from "./module.js";
-import { some_value } from "./jsonpointer.js";
+//import { some_value } from "./jsonpointer.js";
 
 //var somenumber = require ('my_custom_module');
 
