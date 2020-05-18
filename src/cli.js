@@ -28,7 +28,7 @@ import { exported_value } from "./module.js";
 //import { some_value } from "./jsonpointer.js";
 import * as jsonpointer from "jsonpointer.js";
 
-var somenumber = require ('my_custom_module');
+var IRZ = require ('my_custom_module');
 
 var i = 10;
 
@@ -113,10 +113,10 @@ MyObject = {
         print("meow");
       break;
       case "cat":
-        print(cat(userinput[1]));
+        print(IRZ.cat(userinput[1]));
       break;
       case "json":
-        var myjson = JSON.parse(cat(userinput[1]));
+        var myjson = JSON.parse(IRZ.cat(userinput[1]));
         print(myjson.something);
       break;
       case "echo":
@@ -177,12 +177,12 @@ MyObject = {
   {
     print("starting CLI");
     print(exported_value);
-    print(somenumber.myFunc());
+    print(IRZ.myFunc());
     my_var = path + ">";
 
     aulist = pipe("./list.sh").split("\n");
     for (var i = 0; i < aulist.length; i++) {
-      var somejson = JSON.parse(cat(aulist[i]));
+      var somejson = JSON.parse(IRZ.cat(aulist[i]));
       Object.defineProperty(auobject, somejson.title, {value: somejson});
       if (somejson.acquire === undefined){}
       else {
