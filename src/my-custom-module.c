@@ -25,8 +25,17 @@ static jerry_value_t very_useful_function(const jerry_value_t func_value, const 
 
 static jerry_value_t my_custom_module_on_resolve (void)
 {
+  jerry_value_t object = jerry_create_object ();
+  jerry_value_t func_obj = jerry_create_external_function (very_useful_function);
+  jerry_value_t prop_name = jerry_create_string ((const jerry_char_t *) "myFunc");
+
+  jerry_release_value (jerry_set_property (object, prop_name, func_obj));
+  jerry_release_value (prop_name);
+  jerry_release_value (func_obj);
+
+  return object;
   //return jerry_create_number (42);
-  return jerry_create_external_function (very_useful_function);
+  //return jerry_create_external_function (very_useful_function);
 } /* my_custom_module_on_resolve */
 
 JERRYX_NATIVE_MODULE (MODULE_NAME, my_custom_module_on_resolve)

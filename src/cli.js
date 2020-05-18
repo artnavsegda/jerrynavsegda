@@ -177,7 +177,7 @@ MyObject = {
   {
     print("starting CLI");
     print(exported_value);
-    print(somenumber());
+    print(somenumber.myFunc());
     my_var = path + ">";
 
     aulist = pipe("./list.sh").split("\n");
