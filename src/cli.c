@@ -522,23 +522,35 @@ int main (void)
 
   rl_bind_key('\t', zc_completion2);
 
-  jerry_value_t eval_ret = jerry_eval (buf, strlen(buf), JERRY_PARSE_NO_OPTS);
+  //code
 
-  // jerry_value_t parsed_code = jerry_parse (NULL, 0, buf, strlen (buf), JERRY_PARSE_NO_OPTS);
-  //
-  // /* Check if there is any JS code parse error */
-  // if (!jerry_value_is_error (parsed_code))
+  //jerry_value_t eval_ret = jerry_parse (NULL, 0, buf, sizeof (buf) - 1, JERRY_PARSE_NO_OPTS);
+
+  //jerry_value_t eval_ret = jerry_eval (buf, strlen(buf), JERRY_PARSE_NO_OPTS);
+
+  jerry_value_t eval_ret = jerry_parse (NULL, 0, buf, strlen (buf), JERRY_PARSE_NO_OPTS);
+
+
+  // if (!jerry_value_is_error (eval_ret))
   // {
-  //   /* Execute the parsed source code in the Global scope */
-  //   jerry_value_t ret_value = jerry_run (parsed_code);
-  //
-  //   /* Returned value must be freed */
-  //   jerry_release_value (ret_value);
+  //   jerry_value_t func_val = eval_ret;
+  //   eval_ret = jerry_run (func_val);
+  //   jerry_release_value (func_val);
   // }
-  // else
-  // {
-  //   puts("error");
-  // }
+
+  /* Check if there is any JS code parse error */
+  if (!jerry_value_is_error (eval_ret))
+  {
+    /* Execute the parsed source code in the Global scope */
+    jerry_value_t ret_value = jerry_run (eval_ret);
+
+    /* Returned value must be freed */
+    jerry_release_value (ret_value);
+  }
+  else
+  {
+    puts("error");
+  }
 
   /* Parsed source code must be freed */
   //jerry_release_value (parsed_code);
