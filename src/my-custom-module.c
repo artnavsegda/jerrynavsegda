@@ -1,18 +1,3 @@
-/* Copyright JS Foundation and other contributors, http://js.foundation
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 #include <stdlib.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -85,6 +70,68 @@ static jerry_value_t module_cat_handler(const jerry_value_t function_object, con
   return jerry_create_undefined();
 }
 
+static jerry_value_t module_system_handler(const jerry_value_t function_object, const jerry_value_t function_this, const jerry_value_t arguments[], const jerry_length_t arguments_count)
+{
+  if (arguments_count > 0)
+  {
+    jerry_value_t string_value = jerry_value_to_string (arguments[0]);
+    jerry_char_t buffer[256];
+    jerry_size_t copied_bytes = jerry_string_to_utf8_char_buffer (string_value, buffer, sizeof (buffer) - 1);
+    buffer[copied_bytes] = '\0';
+
+    jerry_release_value (string_value);
+
+    printf ("System was called with args %s\n", (const char *)buffer);
+
+    system(buffer);
+
+    //printf("contents: %s",filecontent);
+
+    return jerry_create_undefined();
+  }
+  else
+    printf ("System handler was called\n");
+
+  /* Return an "undefined" value to the JavaScript engine */
+  return jerry_create_undefined();
+}
+
+static jerry_value_t module_pipe_handler(const jerry_value_t function_object, const jerry_value_t function_this, const jerry_value_t arguments[], const jerry_length_t arguments_count)
+{
+  if (arguments_count > 0)
+  {
+    jerry_value_t string_value = jerry_value_to_string (arguments[0]);
+    jerry_char_t buffer[256];
+    jerry_size_t copied_bytes = jerry_string_to_utf8_char_buffer (string_value, buffer, sizeof (buffer) - 1);
+    buffer[copied_bytes] = '\0';
+
+    jerry_release_value (string_value);
+
+    printf ("Pipe was called with args %s\n", (const char *)buffer);
+
+    FILE * filetoread = popen(buffer, "r");
+
+    char filecontent[1000] = "empty";
+
+    if (filetoread)
+    {
+      fread(filecontent,1000,1,filetoread);
+      fclose(filetoread);
+    }
+
+    //printf("contents: %s",filecontent);
+
+    jerry_value_t returnvalue = jerry_create_string (filecontent);
+
+    return returnvalue;
+  }
+  else
+    printf ("Joke handler was called\n");
+
+  /* Return an "undefined" value to the JavaScript engine */
+  return jerry_create_undefined();
+}
+
 static void register_module_js_function (jerry_value_t module, const char *name_p, jerry_external_handler_t handler_p)
 {
   jerry_value_t func_obj = jerry_create_external_function (handler_p);
@@ -98,6 +145,8 @@ static jerry_value_t my_custom_module_on_resolve (void)
 
   register_module_js_function(object, "myFunc", very_useful_function);
   register_module_js_function(object, "cat", module_cat_handler);
+  register_module_js_function(object, "system", module_system_handler);
+  register_module_js_function(object, "pipe", module_pipe_handler);
 
   //jerry_value_t func_obj = jerry_create_external_function (very_useful_function);
   //jerry_release_value (jerryx_set_property_str (object, "myFunc", func_obj));
