@@ -18,10 +18,15 @@
 
 #define MODULE_NAME my_custom_module
 
-static jerry_value_t
-my_custom_module_on_resolve (void)
+static jerry_value_t very_useful_function(const jerry_value_t func_value, const jerry_value_t this_value, const jerry_value_t *args_p, const jerry_length_t args_cnt)
 {
-  return jerry_create_number (42);
+  return jerry_create_number (420);
+}
+
+static jerry_value_t my_custom_module_on_resolve (void)
+{
+  //return jerry_create_number (42);
+  return jerry_create_external_function (very_useful_function);
 } /* my_custom_module_on_resolve */
 
 JERRYX_NATIVE_MODULE (MODULE_NAME, my_custom_module_on_resolve)

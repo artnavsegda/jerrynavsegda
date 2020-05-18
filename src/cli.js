@@ -28,7 +28,7 @@ import { exported_value } from "./module.js";
 //import { some_value } from "./jsonpointer.js";
 import * as jsonpointer from "jsonpointer.js";
 
-//var somenumber = require ('my_custom_module');
+var somenumber = require ('my_custom_module');
 
 var i = 10;
 
@@ -177,6 +177,7 @@ MyObject = {
   {
     print("starting CLI");
     print(exported_value);
+    print(somenumber());
     my_var = path + ">";
 
     aulist = pipe("./list.sh").split("\n");
