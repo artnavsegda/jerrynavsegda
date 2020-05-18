@@ -355,7 +355,7 @@ static void print_unhandled_exception (jerry_value_t error_value) /**< error val
   jerry_release_value (err_str_val);
 } /* print_unhandled_exception */
 
-void execute(char *buf)
+jerry_value_t execute(char *buf)
 {
   //jerry_value_t eval_ret = jerry_parse (NULL, 0, buf, sizeof (buf) - 1, JERRY_PARSE_NO_OPTS);
 
@@ -363,27 +363,26 @@ void execute(char *buf)
 
   jerry_value_t eval_ret = jerry_parse (NULL, 0, buf, strlen (buf), JERRY_PARSE_NO_OPTS);
 
-
-  // if (!jerry_value_is_error (eval_ret))
-  // {
-  //   jerry_value_t func_val = eval_ret;
-  //   eval_ret = jerry_run (func_val);
-  //   jerry_release_value (func_val);
-  // }
-
-  /* Check if there is any JS code parse error */
   if (!jerry_value_is_error (eval_ret))
   {
-    /* Execute the parsed source code in the Global scope */
-    jerry_value_t ret_value = jerry_run (eval_ret);
+    jerry_value_t func_val = eval_ret;
+    eval_ret = jerry_run (func_val);
+    jerry_release_value (func_val);
+  }
 
-    /* Returned value must be freed */
-    jerry_release_value (ret_value);
-  }
-  else
-  {
-    puts("error");
-  }
+  // /* Check if there is any JS code parse error */
+  // if (!jerry_value_is_error (eval_ret))
+  // {
+  //   /* Execute the parsed source code in the Global scope */
+  //   jerry_value_t ret_value = jerry_run (eval_ret);
+  //
+  //   /* Returned value must be freed */
+  //   jerry_release_value (ret_value);
+  // }
+  // else
+  // {
+  //   puts("error");
+  // }
 
   if (!jerry_value_is_error (eval_ret))
   {
@@ -408,7 +407,8 @@ void execute(char *buf)
 
 
   /* Parsed source code must be freed */
-  jerry_release_value (eval_ret);
+  // jerry_release_value (eval_ret);
+  return eval_ret;
 }
 
 int main (void)
@@ -578,83 +578,32 @@ int main (void)
 
   rl_bind_key('\t', zc_completion2);
 
-  //code
-
-  //jerry_value_t eval_ret = jerry_parse (NULL, 0, buf, sizeof (buf) - 1, JERRY_PARSE_NO_OPTS);
-
-  //jerry_value_t eval_ret = jerry_eval (buf, strlen(buf), JERRY_PARSE_NO_OPTS);
-
-  jerry_value_t eval_ret = jerry_parse (NULL, 0, buf, strlen (buf), JERRY_PARSE_NO_OPTS);
-
-
-  // if (!jerry_value_is_error (eval_ret))
-  // {
-  //   jerry_value_t func_val = eval_ret;
-  //   eval_ret = jerry_run (func_val);
-  //   jerry_release_value (func_val);
-  // }
-
-  /* Check if there is any JS code parse error */
-  if (!jerry_value_is_error (eval_ret))
-  {
-    /* Execute the parsed source code in the Global scope */
-    jerry_value_t ret_value = jerry_run (eval_ret);
-
-    /* Returned value must be freed */
-    jerry_release_value (ret_value);
-  }
-  else
-  {
-    puts("error");
-  }
-
-  if (!jerry_value_is_error (eval_ret))
-  {
-    /* Print return value */
-    const jerry_value_t args[] = { eval_ret };
-    jerry_value_t ret_val_print = jerryx_handler_print (jerry_create_undefined (), jerry_create_undefined (), args, 1);
-    jerry_release_value (ret_val_print);
-    jerry_release_value (eval_ret);
-    eval_ret = jerry_run_all_enqueued_jobs ();
-
-    if (jerry_value_is_error (eval_ret))
-    {
-      eval_ret = jerry_get_value_from_error (eval_ret, true);
-      print_unhandled_exception (eval_ret);
-    }
-  }
-  else
-  {
-    eval_ret = jerry_get_value_from_error (eval_ret, true);
-    print_unhandled_exception (eval_ret);
-  }
-
-
-  /* Parsed source code must be freed */
-  jerry_release_value (eval_ret);
+  jerry_release_value(execute(buf));
 
   //tut
 
-  jerry_value_t komplete_func_obj = jerry_create_external_function(komplete_handler);
-  prop_name = jerry_create_string ((const jerry_char_t *) "komplete123");
-  jerry_release_value (jerry_set_property (eval_ret, prop_name, komplete_func_obj));
-  jerry_release_value (komplete_func_obj);
-  jerry_release_value (prop_name);
-  jerry_release_value (eval_ret);
+  // jerry_value_t komplete_func_obj = jerry_create_external_function(komplete_handler);
+  // prop_name = jerry_create_string ((const jerry_char_t *) "komplete123");
+  // jerry_release_value (jerry_set_property (eval_ret, prop_name, komplete_func_obj));
+  // jerry_release_value (komplete_func_obj);
+  // jerry_release_value (prop_name);
+  // jerry_release_value (eval_ret);
 
-  eval_ret = jerry_eval ("MyObject.startup();", strlen("MyObject.startup();"), JERRY_PARSE_NO_OPTS);
+  jerry_release_value(execute("MyObject.startup();"));
 
-  if (jerry_value_is_error (eval_ret))
-  {
-    puts("eval error");
+  //jerry_value_t eval_ret = jerry_eval ("MyObject.startup();", strlen("MyObject.startup();"), JERRY_PARSE_NO_OPTS);
 
-    eval_ret = jerry_get_value_from_error (eval_ret, true);
-    print_unhandled_exception (eval_ret);
-
-
-  }
-
-  jerry_release_value(eval_ret);
+  // if (jerry_value_is_error (eval_ret))
+  // {
+  //   puts("eval error");
+  //
+  //   eval_ret = jerry_get_value_from_error (eval_ret, true);
+  //   print_unhandled_exception (eval_ret);
+  //
+  //
+  // }
+  //
+  // jerry_release_value(eval_ret);
 
   char * inputline = NULL;
   char parseline[1000] = "";
@@ -678,7 +627,8 @@ int main (void)
       break;
 
     sprintf(parseline,"MyObject.compute(\"%s\");",inputline);
-    eval_ret = jerry_eval (parseline, strlen (parseline), JERRY_PARSE_NO_OPTS);
+    // jerry_value_t eval_ret = jerry_eval (parseline, strlen (parseline), JERRY_PARSE_NO_OPTS);
+    jerry_value_t eval_ret = execute(parseline);
 
     if (jerry_get_number_value (eval_ret) == 300.0)
     {
