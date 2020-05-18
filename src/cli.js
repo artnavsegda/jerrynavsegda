@@ -22,9 +22,9 @@
 //
 //print(readline());
 
-var exported_value = 42;
+//var exported_value = 42;
 //export { exported_value };
-//import { exported_value } from "./module.js";
+import { exported_value } from "./module.js";
 
 //var somenumber = require ('my_custom_module');
 
@@ -174,7 +174,7 @@ MyObject = {
   startup: function ()
   {
     print("starting CLI");
-    //print(somenumber);
+    print(exported_value);
     my_var = path + ">";
 
     aulist = pipe("./list.sh").split("\n");
