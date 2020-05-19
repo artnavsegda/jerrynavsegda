@@ -428,6 +428,29 @@ jerry_value_t execute(char *buf)
   return eval_ret;
 }
 
+jerry_value_t compute_callback;
+
+static jerry_value_t reg_compute_handler(const jerry_value_t function_object, const jerry_value_t function_this, const jerry_value_t arguments[], const jerry_length_t arguments_count)
+{
+  if (arguments_count > 0)
+  {
+    if (jerry_value_is_function(arguments[0]))
+    {
+      puts("callback registered");
+      compute_callback = arguments[0];
+    }
+    else
+    {
+      puts("value is not a function");
+    }
+  }
+  else
+    puts("not enough args");
+
+  /* Return an "undefined" value to the JavaScript engine */
+  return jerry_create_undefined();
+}
+
 int main (void)
 {
   printf("ES6 status is %d\n", JERRY_ES2015);
@@ -469,11 +492,9 @@ int main (void)
   // single load
 
   int jsmain = open("./cli.js",O_RDONLY);
-
   struct stat sb;
   fstat(jsmain, &sb);
   char *buf = malloc(sb.st_size+2);
-
   read(jsmain,buf,sb.st_size+1);
   close(jsmain);
   buf[sb.st_size] = '\0';
@@ -547,6 +568,7 @@ int main (void)
   register_js_function("system", system_handler);
   register_js_function("pipe", pipe_handler);
   register_js_function("readline", readline_handler);
+  register_js_function("reg_compute", reg_compute_handler);
 
   /* Releasing string values, as it is no longer necessary outside of engine */
   jerry_release_value (prop_name);
@@ -584,6 +606,8 @@ int main (void)
   //
   // jerry_release_value(eval_ret);
 
+
+
   char * inputline = NULL;
   char parseline[1000] = "";
 
@@ -620,6 +644,21 @@ int main (void)
     jerry_release_value (prop_value);
     jerry_release_value (prop_name);
     jerry_release_value (global_object);
+
+    if (jerry_value_is_function (compute_callback))
+     {
+       jerry_value_t this_val = jerry_create_undefined ();
+       jerry_value_t ret_val = jerry_call_function (compute_callback, this_val, NULL, 0);
+
+       if (!jerry_value_is_error (ret_val))
+       {
+         puts("some kind of error");
+       }
+
+       jerry_release_value (ret_val);
+       jerry_release_value (this_val);
+     }
+
   }
 
   /* Freeing engine */

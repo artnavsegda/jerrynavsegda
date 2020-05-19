@@ -96,6 +96,8 @@ static jerry_value_t module_system_handler(const jerry_value_t function_object, 
   return jerry_create_undefined();
 }
 
+#define CHUNK 10
+
 static jerry_value_t module_pipe_handler(const jerry_value_t function_object, const jerry_value_t function_this, const jerry_value_t arguments[], const jerry_length_t arguments_count)
 {
   if (arguments_count > 0)
@@ -111,17 +113,46 @@ static jerry_value_t module_pipe_handler(const jerry_value_t function_object, co
 
     FILE * filetoread = popen(buffer, "r");
 
-    char filecontent[1000] = "empty";
+    char * buf = malloc(CHUNK+1);
+    int chunkcounter, totalcounter = 0, limit = CHUNK;
 
-    if (filetoread)
+    while (1)
     {
-      fread(filecontent,1000,1,filetoread);
-      fclose(filetoread);
+      chunkcounter = fread(&buf[totalcounter], 1, CHUNK, filetoread);
+      if (chunkcounter == -1)
+      {
+        perror("read error");
+        exit(0);
+      }
+      else
+      {
+        totalcounter += chunkcounter;
+        if (chunkcounter == CHUNK)
+        {
+          limit += CHUNK;
+          char * newbuf = realloc(buf,limit+1);
+          if (newbuf == NULL)
+          {
+            puts("realloc break");
+            break;
+          }
+          else
+            buf = newbuf;
+        }
+        else
+        {
+          puts("counter break");
+          break;
+        }
+      }
     }
+    pclose(filetoread);
 
-    //printf("contents: %s",filecontent);
+    buf[totalcounter] = '\0';
 
-    jerry_value_t returnvalue = jerry_create_string (filecontent);
+    jerry_value_t returnvalue = jerry_create_string (buf);
+
+    free(buf);
 
     return returnvalue;
   }

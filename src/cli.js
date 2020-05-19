@@ -22,6 +22,10 @@
 //
 //print(readline());
 
+reg_compute(function() {
+  print("call back me");
+});
+
 //var exported_value = 42;
 //export { exported_value };
 import { exported_value } from "./module.js";
@@ -123,10 +127,10 @@ MyObject = {
         print(userinput[1]);
       break;
       case "system":
-        system(userinput[1]);
+        IRZ.system(userinput[1]);
       break;
       case "pipe":
-        print(pipe(userinput[1]));
+        print(IRZ.pipe(userinput[1]));
       break;
       case "info":
         print("info");
@@ -180,14 +184,14 @@ MyObject = {
     print(IRZ.myFunc());
     my_var = path + ">";
 
-    aulist = pipe("./list.sh").split("\n");
+    aulist = IRZ.pipe("./list.sh").split("\n");
     for (var i = 0; i < aulist.length; i++) {
       var somejson = JSON.parse(IRZ.cat(aulist[i]));
       Object.defineProperty(auobject, somejson.title, {value: somejson});
       if (somejson.acquire === undefined){}
       else {
         print(somejson.acquire);
-        var pipedata = pipe("./" + somejson.acquire);
+        var pipedata = IRZ.pipe("./" + somejson.acquire);
         var somejsondata = JSON.parse(pipedata);
         Object.defineProperty(dataobject, somejson.title, {value: somejsondata});
       }
