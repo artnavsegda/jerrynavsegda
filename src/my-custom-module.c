@@ -163,6 +163,11 @@ static jerry_value_t module_pipe_handler(const jerry_value_t function_object, co
   return jerry_create_undefined();
 }
 
+static jerry_value_t module_ls_handler(const jerry_value_t func_value, const jerry_value_t this_value, const jerry_value_t *args_p, const jerry_length_t args_cnt)
+{
+  return jerry_create_number (420);
+}
+
 static void register_module_js_function (jerry_value_t module, const char *name_p, jerry_external_handler_t handler_p)
 {
   jerry_value_t func_obj = jerry_create_external_function (handler_p);
@@ -178,6 +183,7 @@ static jerry_value_t my_custom_module_on_resolve (void)
   register_module_js_function(object, "cat", module_cat_handler);
   register_module_js_function(object, "system", module_system_handler);
   register_module_js_function(object, "pipe", module_pipe_handler);
+  register_module_js_function(object, "ls", module_pipe_handler);
 
   //jerry_value_t func_obj = jerry_create_external_function (very_useful_function);
   //jerry_release_value (jerryx_set_property_str (object, "myFunc", func_obj));
