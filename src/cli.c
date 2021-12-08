@@ -17,7 +17,7 @@
 #include "jerryscript-port.h"
 #include "jerryscript-port-default.h"
 
-extern void my_custom_module_register (void);
+// extern void my_custom_module_register (void);
 
 static int fileselect(const struct dirent *entry)
 {
@@ -453,8 +453,8 @@ static jerry_value_t reg_compute_handler(const jerry_value_t function_object, co
 
 int main (void)
 {
-  printf("ES6 status is %d\n", JERRY_ES2015);
-  printf("module status is %d\n", JERRY_ES2015_MODULE_SYSTEM);
+  //printf("ES6 status is %d\n", JERRY_ES2015);
+  //printf("module status is %d\n", JERRY_ES2015_MODULE_SYSTEM);
 
   jerry_port_default_set_log_level(JERRY_LOG_LEVEL_TRACE);
   //jerry_port_log(JERRY_LOG_LEVEL_ERROR, "shit");
@@ -500,7 +500,7 @@ int main (void)
   buf[sb.st_size] = '\0';
 
   /* Initializing JavaScript environment */
-  my_custom_module_register();
+  // my_custom_module_register();
   jerry_init (JERRY_INIT_EMPTY);
   // jerryx_debugger_after_connect (jerryx_debugger_tcp_create (5001)& jerryx_debugger_ws_create ());
 
