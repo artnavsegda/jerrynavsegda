@@ -140,8 +140,8 @@ int main (void)
 {
   bool run_ok = false;
 
-  //const jerry_char_t script[] = "print ('Hello, World!');";
-  const jerry_char_t script[] = "import { exported_value } from \"./module.js\"; print(exported_value)";
+  const jerry_char_t script[] = "print ('Hello, World!');";
+  //const jerry_char_t script[] = "import { exported_value } from \"./module.js\"; print(exported_value)";
 
   /* Initialize engine */
   jerry_init (JERRY_INIT_EMPTY);
